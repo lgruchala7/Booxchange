@@ -14,4 +14,10 @@
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/main_theme_color</item>
     </style>
+    <style name="FullScreen" parent="Theme.Booxchange">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
 </resources>
