@@ -246,7 +246,7 @@
     </ScrollView>
     
     <me.ibrahimsn.lib.SmoothBottomBar
-        android:id="@+id/smoothBottomBar"
+        android:id="@+id/smooth_bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_60sdp"
         android:layout_marginStart="@dimen/_8sdp"
