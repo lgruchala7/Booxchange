@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.booxchange.databinding.ActivityMainBinding;
+
 import me.ibrahimsn.lib.OnItemSelectedListener;
 import me.ibrahimsn.lib.SmoothBottomBar;
 
@@ -14,10 +16,13 @@ public class MainActivity extends AppCompatActivity {
     private static final int MENU_MAP = 1;
     private static final int MENU_ACCOUNT = 2;
 
+    private ActivityMainBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         SmoothBottomBar smoothBottomBar = (SmoothBottomBar)findViewById(R.id.smooth_bottom_bar);
         smoothBottomBar.setOnItemSelectedListener(new OnItemSelectedListener() {
