@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1017845931038",
+    "project_id": "booxchange-372922",
+    "storage_bucket": "booxchange-372922.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1017845931038:android:80a07748c8939eacd4a20f",
+        "android_client_info": {
+          "package_name": "com.example.booxchange"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1017845931038-gjk80kn7ccckd2ukfq7dqcq3c38r5gqe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfsi5FLLVsRyaa8r_lsvNbG9HnV8iw-hU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1017845931038-gjk80kn7ccckd2ukfq7dqcq3c38r5gqe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

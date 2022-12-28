@@ -1,10 +1,11 @@
-package com.example.booxchange;
+package com.example.booxchange.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.booxchange.R;
 import com.example.booxchange.databinding.ActivityMainBinding;
 
 import me.ibrahimsn.lib.OnItemSelectedListener;

@@ -1,4 +1,4 @@
-package com.example.booxchange;
+package com.example.booxchange.activities;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -11,6 +11,7 @@ import android.location.Location;
 import android.location.LocationRequest;
 import android.os.Bundle;
 
+import com.example.booxchange.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;

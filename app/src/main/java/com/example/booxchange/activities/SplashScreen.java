@@ -1,4 +1,4 @@
-package com.example.booxchange;
+package com.example.booxchange.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,8 @@ import android.os.Bundle;
 
 import android.os.Handler;
 import android.os.Looper;
+
+import com.example.booxchange.R;
 
 public class SplashScreen extends AppCompatActivity {
 
