@@ -4,4 +4,9 @@
     <string name="menu_map">Map</string>
     <string name="menu_account">Account</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string-array name="genres">
+        <item>Sci-Fi</item>
+        <item>Tragedy</item>
+        <item>Comedy</item>
+    </string-array>
 </resources>

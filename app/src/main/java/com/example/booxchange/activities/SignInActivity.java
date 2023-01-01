@@ -26,6 +26,11 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         preferenceManager = new PreferenceManager(getApplicationContext());
+        if (preferenceManager.getBoolean(Constants.KEY_IS_SIGNED_IN)) {
+            Intent intent = new Intent(getApplicationContext(), SplashScreen.class);
+            startActivity(intent);
+            finish();
+        }
         binding = ActivitySignInBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setListeners();
