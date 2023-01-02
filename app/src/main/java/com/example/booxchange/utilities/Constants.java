@@ -22,4 +22,12 @@ public class Constants {
     public static final String KEY_SENDER_IMAGE = "senderImage";
     public static final String KEY_RECEIVER_IMAGE = "receiverImage";
     public static final String KEY_LAST_MESSAGE = "lastMessage";
+    public static final String KEY_TITLE = "title";
+    public static final String KEY_AUTHOR = "author";
+    public static final String KEY_GENRE = "genre";
+    public static final String KEY_CONDITION = "condition";
+    public static final String KEY_DESCRIPTION = "description";
+    public static final String KEY_COLLECTION_ADS = "ads";
+    public static final String KEY_CITY = "city";
+    public static final String KEY_ADDRESS = "address";
 }
