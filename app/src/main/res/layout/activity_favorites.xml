@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
-    android:background="@color/color_main"
-    tools:context=".activities.FriendsActivity">
+    tools:context=".activities.FavoritesActivity">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/image_back"
@@ -24,7 +22,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select user"
+        android:text="Favorite ads"
         android:textColor="@color/color_main_dark"
         android:textSize="@dimen/_16ssp"
         android:textStyle="bold"
@@ -42,7 +40,7 @@
         app:layout_constraintTop_toBottomOf="@id/image_back" >
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/users_recycler_view"
+            android:id="@+id/ads_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
@@ -66,7 +64,7 @@
             android:layout_marginStart="@dimen/_24sdp"
             android:layout_marginEnd="@dimen/_24sdp"
             android:gravity="center"
-            android:textColor="@color/color_main_dark"
+            android:textColor="@color/design_default_color_error"
             android:textSize="@dimen/_12ssp"
             android:visibility="gone" />
 

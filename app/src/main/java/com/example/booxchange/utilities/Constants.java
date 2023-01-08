@@ -1,6 +1,9 @@
 package com.example.booxchange.utilities;
 
 public class Constants {
+    public static final int MENU_HOME = 0;
+    public static final int MENU_MAP = 1;
+    public static final int MENU_ACCOUNT = 2;
     public static final String KEY_COLLECTION_USERS = "users";
     public static final String KEY_NAME = "name";
     public static final String KEY_EMAIL = "email";
@@ -30,4 +33,7 @@ public class Constants {
     public static final String KEY_COLLECTION_ADS = "ads";
     public static final String KEY_CITY = "city";
     public static final String KEY_ADDRESS = "address";
+    public static final String KEY_FAVORITES = "favorites";
+    public static final String KEY_USER_IMAGE = "userImage";
+    public static final String KEY_FRIENDS = "friends";
 }

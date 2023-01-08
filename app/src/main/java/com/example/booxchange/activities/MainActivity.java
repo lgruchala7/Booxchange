@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.widget.Toast;
 
-import com.example.booxchange.R;
 import com.example.booxchange.databinding.ActivityMainBinding;
 import com.example.booxchange.utilities.Constants;
 import com.example.booxchange.utilities.PreferenceManager;
@@ -21,13 +20,8 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import java.util.HashMap;
 
 import me.ibrahimsn.lib.OnItemSelectedListener;
-import me.ibrahimsn.lib.SmoothBottomBar;
 
 public class MainActivity extends AppCompatActivity {
-
-    private static final int MENU_HOME = 0;
-    private static final int MENU_MAP = 1;
-    private static final int MENU_ACCOUNT = 2;
 
     private ActivityMainBinding binding;
     private PreferenceManager preferenceManager;
@@ -38,16 +32,31 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         preferenceManager = new PreferenceManager(getApplicationContext());
+        init();
         setListeners();
         loadUserDetails();
         getToken();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        binding.smoothBottomBar.setItemActiveIndex(Constants.MENU_HOME);
+    }
+
     private void loadUserDetails() {
         binding.welcomeText.setText("Welcome " + preferenceManager.getString(Constants.KEY_NAME));
-        byte[] bytes = Base64.decode(preferenceManager.getString(Constants.KEY_IMAGE), Base64.DEFAULT);
-        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-        binding.imageProfile.setImageBitmap(bitmap);
+        try {
+            byte[] bytes = Base64.decode(preferenceManager.getString(Constants.KEY_USER_IMAGE), Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            binding.imageProfile.setImageBitmap(bitmap);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void init() {
+        binding.smoothBottomBar.setItemActiveIndex(Constants.MENU_HOME);
     }
 
     private void showToast(String text) {
@@ -59,25 +68,29 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onItemSelect(int i) {
                 switch (i) {
-                case MENU_MAP:
+                case Constants.MENU_MAP:
                     startActivity(new Intent(MainActivity.this, MapsActivity.class));
-//                    finish();
+                    overridePendingTransition(0, 0);
                     break;
-                case MENU_ACCOUNT:
+                case Constants.MENU_ACCOUNT:
                     signOut();
+                    break;
                 }
                 return false;
             }
         });
 
         binding.layoutFollowed.setOnClickListener( v -> {
-            startActivity(new Intent(MainActivity.this, UsersActivity.class));
+            startActivity(new Intent(MainActivity.this, FriendsActivity.class));
         });
         binding.layoutLastChats.setOnClickListener( v -> {
             startActivity(new Intent(MainActivity.this, LastChatsActivity.class));
         });
         binding.layoutNewAd.setOnClickListener( v -> {
             startActivity(new Intent(MainActivity.this, NewAdActivity.class));
+        });
+        binding.layoutFavorites.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, FavoritesActivity.class));
         });
     }
 
@@ -112,4 +125,5 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .addOnFailureListener(e -> showToast("Unable to sign out"));
     }
+
 }

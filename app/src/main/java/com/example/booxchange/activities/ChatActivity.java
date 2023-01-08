@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.booxchange.adapters.ChatAdapter;
 import com.example.booxchange.databinding.ActivityChatBinding;
@@ -19,6 +20,7 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -145,6 +147,23 @@ public class ChatActivity extends AppCompatActivity {
     private void setListeners() {
         binding.imageBack.setOnClickListener(v -> onBackPressed());
         binding.layoutSend.setOnClickListener(v -> sendMessage());
+        binding.imageAddFriend.setOnClickListener(v -> addToFriends());
+    }
+
+    private void addToFriends() {
+        DocumentReference usersDocRef = database.collection(Constants.KEY_COLLECTION_USERS)
+                .document(preferenceManager.getString(Constants.KEY_USER_ID));
+        if (usersDocRef != null) {
+            usersDocRef.update(Constants.KEY_FRIENDS, FieldValue.arrayUnion(receiverUser.id))
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getApplicationContext(), "Added to friends", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(getApplicationContext(), "Error while adding to friends", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
     }
 
     private String getReadableDateTime(Date date) {
@@ -188,7 +207,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private final OnCompleteListener<QuerySnapshot> conversionCompleteListener = task -> {
-        if (task.isSuccessful() && task.getResult() != null && task.getResult().getDocuments().size() > 0) {
+        if (task.isSuccessful() && task.getResult() != null && !task.getResult().getDocuments().isEmpty()) {
             DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
             conversionId = documentSnapshot.getId();
         }

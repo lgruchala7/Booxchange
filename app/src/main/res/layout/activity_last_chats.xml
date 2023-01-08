@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="@color/color_main"
-    tools:context=".activities.UsersActivity">
+    tools:context=".activities.FriendsActivity">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/image_back"
@@ -15,18 +15,17 @@
         android:layout_marginStart="@dimen/_16sdp"
         android:layout_marginLeft="@dimen/_16sdp"
         android:layout_marginTop="@dimen/_12sdp"
-        android:background="@drawable/icon_background"
         android:padding="@dimen/_5sdp"
         android:src="@drawable/ic_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:tint="@color/search_background" />
+        android:tint="@color/color_main_dark" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Chats"
-        android:textColor="@color/bottom_bar_icon_tint_active"
+        android:textColor="@color/color_main_dark"
         android:textSize="@dimen/_16ssp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/image_back"
@@ -72,24 +71,5 @@
             android:visibility="gone" />
 
     </FrameLayout>
-
-    <me.ibrahimsn.lib.SmoothBottomBar
-        android:id="@+id/smooth_bottom_bar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_60sdp"
-        android:layout_marginStart="@dimen/_8sdp"
-        android:layout_marginEnd="@dimen/_8sdp"
-        android:layout_marginBottom="@dimen/_8sdp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:backgroundColor="@color/search_background"
-        app:iconSize="@dimen/_20sdp"
-        app:iconTint="@color/bottom_bar_icon_tint"
-        app:iconTintActive="@color/bottom_bar_icon_tint_active"
-        app:indicatorColor="@color/bottom_bar_indicator_color"
-        app:indicatorRadius="@dimen/_8sdp"
-        app:menu="@menu/menu_bottom_navigation"
-        app:textColor="@color/bottom_bar_text_color"
-        app:textSize="@dimen/_10ssp"
-        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

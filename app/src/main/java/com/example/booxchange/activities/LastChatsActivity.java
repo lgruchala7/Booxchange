@@ -7,11 +7,9 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.booxchange.adapters.RecentConversationsAdapter;
-import com.example.booxchange.adapters.UsersAdapter;
 import com.example.booxchange.databinding.ActivityLastChatsBinding;
-import com.example.booxchange.databinding.ActivityUsersBinding;
 import com.example.booxchange.listeners.ConversionListener;
-import com.example.booxchange.listeners.UserListener;
+import com.example.booxchange.models.Ad;
 import com.example.booxchange.models.ChatMessage;
 import com.example.booxchange.models.User;
 import com.example.booxchange.utilities.Constants;
@@ -19,11 +17,9 @@ import com.example.booxchange.utilities.PreferenceManager;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -40,13 +36,13 @@ public class LastChatsActivity extends AppCompatActivity implements ConversionLi
         super.onCreate(savedInstanceState);
         binding = ActivityLastChatsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        preferenceManager = new PreferenceManager(getApplicationContext());
         init();
         setListeners();
         listenConversations();
     }
 
     private void init() {
+        preferenceManager = new PreferenceManager(getApplicationContext());
         conversations = new ArrayList<>();
         conversationsAdapter = new RecentConversationsAdapter(conversations, this);
         binding.conversationsRecyclerView.setAdapter(conversationsAdapter);

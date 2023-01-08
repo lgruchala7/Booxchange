@@ -47,87 +47,119 @@ tools:context=".activities.NewAdActivity">
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_16sdp">
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            android:id="@+id/adImagesLayout"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content">-->
 
-            <FrameLayout
-                android:id="@+id/layout_image_book_1"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/adImagesRecyclerView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true">
+                android:layout_marginTop="@dimen/_16sdp"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
-                <ImageView
-                    android:id="@+id/image_book_1"
-                    android:layout_width="@dimen/_80sdp"
-                    android:layout_height="@dimen/_80sdp"
-                    android:background="@color/search_background"/>
+<!--            <androidx.appcompat.widget.AppCompatImageView-->
+<!--                android:id="@+id/image_add_photo"-->
+<!--                android:layout_width="@dimen/_30sdp"-->
+<!--                android:layout_height="@dimen/_30sdp"-->
+<!--                android:layout_marginTop="@dimen/_12sdp"-->
+<!--                android:layout_marginEnd="@dimen/_16sdp"-->
+<!--                android:layout_marginRight="@dimen/_16sdp"-->
+<!--                android:padding="@dimen/_4sdp"-->
+<!--                android:background="@drawable/background_input"-->
+<!--                android:src="@drawable/ic_add_photo"-->
+<!--                app:layout_constraintStart_toEndOf="@id/adImagesRecyclerView"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                android:tint="@color/color_main_dark" />-->
 
-                <TextView
-                    android:id="@+id/text_add_image_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Add image"
-                    android:layout_gravity="center"
-                    android:textColor="@color/secondary_text"
-                    android:textSize="@dimen/_10ssp" />
+<!--            <RelativeLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="@dimen/_16sdp">-->
 
-            </FrameLayout>
+<!--                <FrameLayout-->
+<!--                    android:id="@+id/layout_image_book_1"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_alignParentStart="true">-->
 
-            <FrameLayout
-                android:id="@+id/layout_image_book_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:visibility="gone">
+<!--                    <ImageView-->
+<!--                        android:id="@+id/image_book_1"-->
+<!--                        android:layout_width="@dimen/_80sdp"-->
+<!--                        android:layout_height="@dimen/_80sdp"-->
+<!--                        android:background="@color/search_background"/>-->
 
-                <ImageView
-                    android:id="@+id/image_book_2"
-                    android:layout_width="@dimen/_80sdp"
-                    android:layout_height="@dimen/_80sdp"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@color/search_background" />
+<!--                    <TextView-->
+<!--                        android:id="@+id/text_add_image_1"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Add image"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:textColor="@color/secondary_text"-->
+<!--                        android:textSize="@dimen/_10ssp" />-->
 
-<!--                    android:id="@+id/text_add_image"-->
-                <TextView
-                    android:id="@+id/text_add_image_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Add image"
-                    android:textColor="@color/secondary_text"
-                    android:textSize="@dimen/_10ssp" />
+<!--                </FrameLayout>-->
 
-            </FrameLayout>
+<!--                <FrameLayout-->
+<!--                    android:id="@+id/layout_image_book_2"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_centerHorizontal="true"-->
+<!--                    android:visibility="gone">-->
 
-            <FrameLayout
-                android:id="@+id/layout_image_book_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:visibility="gone">
+<!--                    <ImageView-->
+<!--                        android:id="@+id/image_book_2"-->
+<!--                        android:layout_width="@dimen/_80sdp"-->
+<!--                        android:layout_height="@dimen/_80sdp"-->
+<!--                        android:layout_gravity="center_horizontal"-->
+<!--                        android:background="@color/search_background" />-->
 
-                <ImageView
-                    android:id="@+id/image_book_3"
-                    android:layout_width="@dimen/_80sdp"
-                    android:layout_height="@dimen/_80sdp"
-                    android:background="@color/search_background" />
+<!--    &lt;!&ndash;                    android:id="@+id/text_add_image"&ndash;&gt;-->
+<!--                    <TextView-->
+<!--                        android:id="@+id/text_add_image_2"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:text="Add image"-->
+<!--                        android:textColor="@color/secondary_text"-->
+<!--                        android:textSize="@dimen/_10ssp" />-->
 
-<!--                    android:id="@+id/text_add_image"-->
-                <TextView
-                    android:id="@+id/text_add_image_3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Add image"
-                    android:layout_gravity="center"
-                    android:textColor="@color/secondary_text"
-                    android:textSize="@dimen/_10ssp" />
+<!--                </FrameLayout>-->
 
-            </FrameLayout>
+<!--                <FrameLayout-->
+<!--                    android:id="@+id/layout_image_book_3"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_alignParentEnd="true"-->
+<!--                    android:visibility="gone">-->
 
-        </RelativeLayout>
+<!--                    <ImageView-->
+<!--                        android:id="@+id/image_book_3"-->
+<!--                        android:layout_width="@dimen/_80sdp"-->
+<!--                        android:layout_height="@dimen/_80sdp"-->
+<!--                        android:background="@color/search_background" />-->
 
+<!--    &lt;!&ndash;                    android:id="@+id/text_add_image"&ndash;&gt;-->
+<!--                    <TextView-->
+<!--                        android:id="@+id/text_add_image_3"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Add image"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:textColor="@color/secondary_text"-->
+<!--                        android:textSize="@dimen/_10ssp" />-->
+
+<!--                </FrameLayout>-->
+
+<!--            </RelativeLayout>-->
+
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
         <LinearLayout
             android:layout_width="match_parent"
