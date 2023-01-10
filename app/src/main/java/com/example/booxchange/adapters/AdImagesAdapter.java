@@ -5,28 +5,26 @@ import android.graphics.BitmapFactory;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.booxchange.activities.NewAdActivity;
 import com.example.booxchange.databinding.ItemContainerAdImageBinding;
-import com.example.booxchange.databinding.ItemContainerRecentConversationBinding;
-import com.example.booxchange.listeners.AddPhotoListener;
-import com.example.booxchange.models.ChatMessage;
-import com.example.booxchange.models.User;
+import com.example.booxchange.listeners.AdImageListaner;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class AdImagesAdapter extends RecyclerView.Adapter<AdImagesAdapter.ViewHolder> {
 
     private ArrayList<String> encodedImages;
-    private AddPhotoListener addPhotoListener;
+    private AdImageListaner adImageListaner;
+    private boolean isImageFitToScreen = false;
 
-    public AdImagesAdapter(ArrayList<String> encodedImages, AddPhotoListener addPhotoListener) {
+    public AdImagesAdapter(ArrayList<String> encodedImages, AdImageListaner adImageListaner) {
         this.encodedImages = encodedImages;
-        this.addPhotoListener = addPhotoListener;
+        this.adImageListaner = adImageListaner;
     }
 
     @NonNull
@@ -59,13 +57,14 @@ public class AdImagesAdapter extends RecyclerView.Adapter<AdImagesAdapter.ViewHo
 
         void setData(String encodedImage) {
             binding.adImage.setImageBitmap(getAdImage(encodedImage));
-            if (getItemCount() == 1) {
-                binding.getRoot().setOnClickListener(v -> {
-                    addPhotoListener.onAddPhotoClicked();
-                });
-            }
-            else {
 
+//            if (adImageListaner != null && getItemCount() == 1) {
+//                binding.getRoot().setOnClickListener(v -> {
+//                    adImageListaner.onAddPhotoClicked();
+//                });
+//            }
+            if (adImageListaner != null) {
+                binding.adImage.setOnClickListener(v -> adImageListaner.onAdImageClicked(v) );
             }
         }
     }

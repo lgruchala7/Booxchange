@@ -1,317 +1,242 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:clipToPadding="false"
-android:overScrollMode="never"
-android:padding="@dimen/_24sdp"
-android:scrollbars="none"
-android:background="@color/white"
-android:fillViewport="true"
-tools:context=".activities.NewAdActivity">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/image_back"
-                android:layout_width="@dimen/_30sdp"
-                android:layout_height="@dimen/_30sdp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:background="@drawable/icon_background"
-                android:padding="@dimen/_5sdp"
-                android:src="@drawable/ic_back"
-                android:tint="@color/search_background" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:text="Fill in ad info"
-                android:textColor="@color/primary_label"
-                android:textSize="@dimen/_18ssp"
-                android:textStyle="bold"
-                android:layout_gravity="center_horizontal"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--            android:id="@+id/adImagesLayout"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content">-->
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/adImagesRecyclerView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16sdp"
-                android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-
-<!--            <androidx.appcompat.widget.AppCompatImageView-->
-<!--                android:id="@+id/image_add_photo"-->
-<!--                android:layout_width="@dimen/_30sdp"-->
-<!--                android:layout_height="@dimen/_30sdp"-->
-<!--                android:layout_marginTop="@dimen/_12sdp"-->
-<!--                android:layout_marginEnd="@dimen/_16sdp"-->
-<!--                android:layout_marginRight="@dimen/_16sdp"-->
-<!--                android:padding="@dimen/_4sdp"-->
-<!--                android:background="@drawable/background_input"-->
-<!--                android:src="@drawable/ic_add_photo"-->
-<!--                app:layout_constraintStart_toEndOf="@id/adImagesRecyclerView"-->
-<!--                app:layout_constraintTop_toTopOf="parent"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                android:tint="@color/color_main_dark" />-->
-
-<!--            <RelativeLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="@dimen/_16sdp">-->
-
-<!--                <FrameLayout-->
-<!--                    android:id="@+id/layout_image_book_1"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_alignParentStart="true">-->
-
-<!--                    <ImageView-->
-<!--                        android:id="@+id/image_book_1"-->
-<!--                        android:layout_width="@dimen/_80sdp"-->
-<!--                        android:layout_height="@dimen/_80sdp"-->
-<!--                        android:background="@color/search_background"/>-->
-
-<!--                    <TextView-->
-<!--                        android:id="@+id/text_add_image_1"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="Add image"-->
-<!--                        android:layout_gravity="center"-->
-<!--                        android:textColor="@color/secondary_text"-->
-<!--                        android:textSize="@dimen/_10ssp" />-->
-
-<!--                </FrameLayout>-->
-
-<!--                <FrameLayout-->
-<!--                    android:id="@+id/layout_image_book_2"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_centerHorizontal="true"-->
-<!--                    android:visibility="gone">-->
-
-<!--                    <ImageView-->
-<!--                        android:id="@+id/image_book_2"-->
-<!--                        android:layout_width="@dimen/_80sdp"-->
-<!--                        android:layout_height="@dimen/_80sdp"-->
-<!--                        android:layout_gravity="center_horizontal"-->
-<!--                        android:background="@color/search_background" />-->
-
-<!--    &lt;!&ndash;                    android:id="@+id/text_add_image"&ndash;&gt;-->
-<!--                    <TextView-->
-<!--                        android:id="@+id/text_add_image_2"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_gravity="center"-->
-<!--                        android:text="Add image"-->
-<!--                        android:textColor="@color/secondary_text"-->
-<!--                        android:textSize="@dimen/_10ssp" />-->
-
-<!--                </FrameLayout>-->
-
-<!--                <FrameLayout-->
-<!--                    android:id="@+id/layout_image_book_3"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_alignParentEnd="true"-->
-<!--                    android:visibility="gone">-->
-
-<!--                    <ImageView-->
-<!--                        android:id="@+id/image_book_3"-->
-<!--                        android:layout_width="@dimen/_80sdp"-->
-<!--                        android:layout_height="@dimen/_80sdp"-->
-<!--                        android:background="@color/search_background" />-->
-
-<!--    &lt;!&ndash;                    android:id="@+id/text_add_image"&ndash;&gt;-->
-<!--                    <TextView-->
-<!--                        android:id="@+id/text_add_image_3"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="Add image"-->
-<!--                        android:layout_gravity="center"-->
-<!--                        android:textColor="@color/secondary_text"-->
-<!--                        android:textSize="@dimen/_10ssp" />-->
-
-<!--                </FrameLayout>-->
-
-<!--            </RelativeLayout>-->
-
-<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+    <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:overScrollMode="never"
+    android:padding="@dimen/_24sdp"
+    android:scrollbars="none"
+    android:background="@color/white"
+    android:fillViewport="true"
+    tools:context=".activities.NewAdActivity">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/input_title"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_45sdp"
-                android:layout_marginTop="@dimen/_20sdp"
-                android:background="@drawable/background_input"
-                android:hint="Title"
-                android:imeOptions="actionNext"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:paddingStart="@dimen/_16sdp"
-                android:paddingEnd="@dimen/_16sdp"
-                android:textSize="@dimen/_13ssp" />
+                android:layout_height="wrap_content" >
 
-            <EditText
-                android:id="@+id/input_author"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_45sdp"
-                android:layout_marginTop="@dimen/_16sdp"
-                android:background="@drawable/background_input"
-                android:hint="Author"
-                android:imeOptions="actionNext"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:paddingStart="@dimen/_16sdp"
-                android:paddingEnd="@dimen/_16sdp"
-                android:textColor="@color/primary_text"
-                android:textSize="@dimen/_13ssp" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16sdp"
-                android:hint="Genre"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu" >
-
-                <AutoCompleteTextView
-                    android:id="@+id/input_genre"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="none" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingHorizontal="@dimen/_16sdp"
-                android:layout_marginTop="@dimen/_16sdp">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/image_back"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:background="@drawable/icon_background"
+                    android:padding="@dimen/_5sdp"
+                    android:src="@drawable/ic_back"
+                    android:tint="@color/search_background" />
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Condition"
-                    android:textSize="@dimen/_13ssp"
-                    android:textColor="@color/secondary_label"/>
-
-                <RatingBar
-                    android:id="@+id/input_condition"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:layout_marginBottom="@dimen/_5sdp"
-                    android:layout_gravity="center_horizontal"
-                    android:stepSize="1"
-                    android:numStars="5" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="Fill in ad info"
+                    android:textColor="@color/primary_label"
+                    android:textSize="@dimen/_18ssp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center_horizontal"/>
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <EditText
-                android:id="@+id/input_description"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/adImagesRecyclerView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="@dimen/_100sdp"
-                android:layout_marginTop="@dimen/_16sdp"
-                android:background="@drawable/background_input"
-                android:hint="Description"
-                android:gravity="start"
-                android:imeOptions="actionNext"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:paddingStart="@dimen/_16sdp"
-                android:paddingEnd="@dimen/_16sdp"
-                android:paddingTop="@dimen/_8sdp"
-                android:textColor="@color/primary_text"
-                android:textSize="@dimen/_13ssp"
-                android:maxLength="200"/>
+                android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/input_city"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_45sdp"
-                android:layout_marginTop="@dimen/_16sdp"
-                android:background="@drawable/background_input"
-                android:hint="City"
-                android:imeOptions="actionNext"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:paddingStart="@dimen/_16sdp"
-                android:paddingEnd="@dimen/_16sdp"
-                android:textColor="@color/primary_text"
-                android:textSize="@dimen/_13ssp" />
+                <EditText
+                    android:id="@+id/input_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_45sdp"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:background="@drawable/background_input"
+                    android:hint="Title"
+                    android:imeOptions="actionNext"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:paddingStart="@dimen/_16sdp"
+                    android:paddingEnd="@dimen/_16sdp"
+                    android:textSize="@dimen/_13ssp" />
 
-            <EditText
-                android:id="@+id/input_address"
+                <EditText
+                    android:id="@+id/input_author"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_45sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:background="@drawable/background_input"
+                    android:hint="Author"
+                    android:imeOptions="actionNext"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:paddingStart="@dimen/_16sdp"
+                    android:paddingEnd="@dimen/_16sdp"
+                    android:textColor="@color/primary_text"
+                    android:textSize="@dimen/_13ssp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:hint="Genre"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu" >
+
+                    <AutoCompleteTextView
+                        android:id="@+id/input_genre"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="@dimen/_16sdp"
+                    android:layout_marginTop="@dimen/_16sdp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Condition"
+                        android:textSize="@dimen/_13ssp"
+                        android:textColor="@color/secondary_label"/>
+
+                    <RatingBar
+                        android:id="@+id/input_condition"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:layout_gravity="center_horizontal"
+                        android:stepSize="1"
+                        android:numStars="5" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <EditText
+                    android:id="@+id/input_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/_100sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:background="@drawable/background_input"
+                    android:hint="Description"
+                    android:gravity="start"
+                    android:imeOptions="actionNext"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:paddingStart="@dimen/_16sdp"
+                    android:paddingEnd="@dimen/_16sdp"
+                    android:paddingTop="@dimen/_8sdp"
+                    android:paddingBottom="@dimen/_8sdp"
+                    android:textColor="@color/primary_text"
+                    android:textSize="@dimen/_13ssp"
+                    android:maxLength="200"/>
+
+                <EditText
+                    android:id="@+id/input_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_45sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:background="@drawable/background_input"
+                    android:hint="City"
+                    android:imeOptions="actionNext"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:paddingStart="@dimen/_16sdp"
+                    android:paddingEnd="@dimen/_16sdp"
+                    android:textColor="@color/primary_text"
+                    android:textSize="@dimen/_13ssp" />
+
+                <EditText
+                    android:id="@+id/input_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_45sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:background="@drawable/background_input"
+                    android:hint="Address"
+                    android:imeOptions="actionNext"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:paddingStart="@dimen/_16sdp"
+                    android:paddingEnd="@dimen/_16sdp"
+                    android:textColor="@color/primary_text"
+                    android:textSize="@dimen/_13ssp" />
+
+            </LinearLayout>
+
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_45sdp"
-                android:layout_marginTop="@dimen/_16sdp"
-                android:background="@drawable/background_input"
-                android:hint="Address"
-                android:imeOptions="actionNext"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:paddingStart="@dimen/_16sdp"
-                android:paddingEnd="@dimen/_16sdp"
-                android:textColor="@color/primary_text"
-                android:textSize="@dimen/_13ssp" />
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:layout_marginTop="@dimen/_16sdp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_publish"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_50sdp"
+                    android:text="Publish"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_13ssp"
+                    android:textStyle="bold"
+                    app:cornerRadius="@dimen/_8sdp" />
+
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_gravity="center"
+                    android:visibility="invisible" />
+
+            </FrameLayout>
 
         </LinearLayout>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
-            android:layout_marginTop="@dimen/_16sdp">
+    </ScrollView>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_publish"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_50sdp"
-                android:text="Publish"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_13ssp"
-                android:textStyle="bold"
-                app:cornerRadius="@dimen/_8sdp" />
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/image_full_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#D0000000"
+        android:visibility="gone"
+        android:padding="@dimen/_8sdp"
+        android:src="@drawable/ic_message" />
 
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                android:layout_width="@dimen/_25sdp"
-                android:layout_height="@dimen/_25sdp"
-                android:layout_gravity="center"
-                android:visibility="invisible" />
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/image_close"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:layout_marginEnd="@dimen/_16sdp"
+        android:src="@drawable/ic_close"
+        app:tint="@color/white"
+        android:visibility="gone" />
 
-        </FrameLayout>
-
-    </LinearLayout>
-
-</ScrollView>
+</RelativeLayout>

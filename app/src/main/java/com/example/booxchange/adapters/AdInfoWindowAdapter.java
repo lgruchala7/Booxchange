@@ -39,35 +39,40 @@ public class AdInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     @Nullable
     @Override
     public View getInfoContents(@NonNull Marker marker) {
-        int adIndex = Integer.parseInt(marker.getSnippet());
-        Ad ad = adList.get(adIndex);
+        try {
+            int adIndex = Integer.parseInt(marker.getSnippet());
+            Ad ad = adList.get(adIndex);
 
-        TextView title = (TextView) customView.findViewById(R.id.text_title);
-        title.setText("\"" + ad.title + "\"");
+            TextView title = (TextView) customView.findViewById(R.id.text_title);
+            title.setText("\"" + ad.title + "\"");
 
-        TextView author = (TextView) customView.findViewById(R.id.text_author);
-        author.setText(ad.author);
+            TextView author = (TextView) customView.findViewById(R.id.text_author);
+            author.setText(ad.author);
 
-        TextView genre = (TextView) customView.findViewById(R.id.text_genre);
-        genre.setText(ad.genre);
+            TextView genre = (TextView) customView.findViewById(R.id.text_genre);
+            genre.setText(ad.genre);
 
-        RatingBar condition = (RatingBar) customView.findViewById(R.id.rating_bar_condition);
-        condition.setRating(Float.parseFloat(ad.condition));
+            RatingBar condition = (RatingBar) customView.findViewById(R.id.rating_bar_condition);
+            condition.setRating(Float.parseFloat(ad.condition));
 
-        TextView description = (TextView) customView.findViewById(R.id.text_description);
-        description.setText(ad.description);
+            TextView description = (TextView) customView.findViewById(R.id.text_description);
+            description.setText(ad.description);
 
-        TextView city = (TextView) customView.findViewById(R.id.text_city);
-        city.setText(ad.city);
+            TextView city = (TextView) customView.findViewById(R.id.text_city);
+            city.setText(ad.city);
 
-        TextView address = (TextView) customView.findViewById(R.id.text_address);
-        address.setText(ad.address);
+            TextView address = (TextView) customView.findViewById(R.id.text_address);
+            address.setText(ad.address);
 
-        AppCompatImageView adImage = (AppCompatImageView) customView.findViewById(R.id.image_ad);
-        adImage.setImageBitmap(getBitmapFromEncodedString(ad.images.get(0)));
-        adImage.setBackground(null);
+            AppCompatImageView adImage = (AppCompatImageView) customView.findViewById(R.id.image_ad);
+            adImage.setImageBitmap(getBitmapFromEncodedString(ad.images.get(0)));
+            adImage.setBackground(null);
 
-        return customView;
+            return customView;
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private Bitmap getBitmapFromEncodedString(String encodedImage) {

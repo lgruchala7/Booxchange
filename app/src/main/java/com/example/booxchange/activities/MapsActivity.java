@@ -49,6 +49,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.booxchange.databinding.ActivityMapsBinding;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.common.collect.Maps;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
@@ -109,31 +110,40 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onResume() {
         super.onResume();
 
-        binding.smoothBottomBar.setItemActiveIndex(Constants.MENU_MAP);
+//        binding.smoothBottomBar.setItemActiveIndex(Constants.MENU_MAP);
     }
 
     private void init() {
+        for (int i = 0; i < binding.chipNavigationBar.getChildCount(); i++) {
+            switch (i) {
+                case 0:
+                    Constants.MENU_HOME = binding.chipNavigationBar.getChildAt(i).getId();
+                    break;
+                case 1:
+                    Constants.MENU_MAP = binding.chipNavigationBar.getChildAt(i).getId();
+                    break;
+                case 2:
+                    Constants.MENU_ACCOUNT = binding.chipNavigationBar.getChildAt(i).getId();
+                    break;
+            }
+        }
+        binding.chipNavigationBar.setItemSelected(Constants.MENU_MAP, true);
         database = FirebaseFirestore.getInstance();
         ads = new ArrayList<>();
         preferenceManager = new PreferenceManager(getApplicationContext());
-        binding.smoothBottomBar.setItemActiveIndex(Constants.MENU_MAP);
     }
 
     private void setListeners() {
-        binding.smoothBottomBar.setOnItemSelectedListener(new OnItemSelectedListener() {
-            @Override
-            public boolean onItemSelect(int i) {
-                switch (i) {
-                    case Constants.MENU_HOME:
-                        onBackPressed();
-//                        startActivity(new Intent(MapsActivity.this, MainActivity.class));
-                        overridePendingTransition(0,0);
-                        break;
-                    case Constants.MENU_ACCOUNT:
-                        // TODO
-                        break;
-                }
-                return false;
+        binding.chipNavigationBar.setOnItemSelectedListener( i -> {
+            if (i == Constants.MENU_HOME) {
+                startActivity(new Intent(MapsActivity.this, MainActivity.class));
+                overridePendingTransition(0, 0);
+                finish();
+            }
+            else if (i == Constants.MENU_ACCOUNT) {
+                startActivity(new Intent(MapsActivity.this, AccountActivity.class));
+                overridePendingTransition(0, 0);
+                finish();
             }
         });
         binding.fabStartChat.setOnClickListener(v -> {
@@ -180,6 +190,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         String userId = documentChange.getDocument().getString(Constants.KEY_USER_ID);
                         String userName = documentChange.getDocument().getString(Constants.KEY_NAME);
                         String userImage = documentChange.getDocument().getString(Constants.KEY_USER_IMAGE);
+                        String userEmail = documentChange.getDocument().getString(Constants.KEY_EMAIL);
 
                         if (!userId.equals(preferenceManager.getString(Constants.KEY_USER_ID))) {
                             Ad ad = new Ad();
@@ -196,6 +207,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             ad.userName = userName;
                             ad.userId = userId;
                             ad.userImage = userImage;
+                            ad.userEmail = userEmail;
 
                             ads.add(ad);
                         }
@@ -220,7 +232,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             Date dateObject = documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP);
                             String userId = documentChange.getDocument().getString(Constants.KEY_USER_ID);
                             String userName = documentChange.getDocument().getString(Constants.KEY_NAME);
-                            String userImage = documentChange.getDocument().getString(Constants.KEY_IMAGE);
+                            String userImage = documentChange.getDocument().getString(Constants.KEY_USER_IMAGE);
+                            String userEmail = documentChange.getDocument().getString(Constants.KEY_EMAIL);
 
                             if (!userId.equals(preferenceManager.getString(Constants.KEY_USER_ID))) {
                                 ads.get(i).title = title;
@@ -236,6 +249,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 ads.get(i).userName = userName;
                                 ads.get(i).userId = userId;
                                 ads.get(i).userImage = userImage;
+                                ads.get(i).userEmail = userEmail;
                             }
                         }
                     }
@@ -249,21 +263,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             showAdsOnMap();
         });
     }
-
-//    private final EventListener<QuerySnapshot> eventListenerFavorites = (value, error) -> {
-//        if (error != null) {
-//            return;
-//        }
-//        if (value != null) {
-//            if (value.size() > 0) {
-//                DocumentChange documentChange = value.getDocumentChanges().get(0);
-//                String documentId = value.getDocuments().get(0).getId();
-//                if (documentChange.getType() == DocumentChange.Type.ADDED) {
-//
-//                }
-//            }
-//        }
-//    };
 
     private String getReadableDateTime(Date date) {
         return new SimpleDateFormat("dd MMMM, yyyy - kk:mm", Locale.getDefault()).format(date);
@@ -303,10 +302,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             usersDocRef.update(Constants.KEY_FAVORITES, FieldValue.arrayUnion(adId))
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Toast.makeText(getApplicationContext(), "Added to favorites", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MapsActivity.this, "Added to favorites", Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        Toast.makeText(getApplicationContext(), "Error while adding to favorites", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MapsActivity.this, "Error while adding to favorites", Toast.LENGTH_SHORT).show();
                     }
                 });
         }
@@ -340,7 +339,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             boolean success = googleMap.setMapStyle(
                     MapStyleOptions.loadRawResourceStyle(
                             this, R.raw.mapstyle));
-
             if (!success) {
                 Log.e(this.getLocalClassName(), "Style parsing failed.");
             }
@@ -349,24 +347,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
 
+        mMap.setInfoWindowAdapter(new AdInfoWindowAdapter(MapsActivity.this, ads));
+        setMapListeners();
+        listenAds();
+    }
+
+    private void setMapListeners() {
         mMap.setOnMarkerClickListener(this);
         mMap.setOnMapClickListener(this);
-        mMap.setInfoWindowAdapter(new AdInfoWindowAdapter(MapsActivity.this, ads));
-        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-            @Override
-            public void onInfoWindowClick(@NonNull Marker marker) {
-//                int adIndex = Integer.parseInt(marker.getSnippet());
-//                Ad ad = ads.get(adIndex);
-//
-//                User user = new User(ad.userId, ad.userName, ad.userImage);
-//
-//                Intent intent = new Intent(MapsActivity.this, ChatActivity.class);
-//                intent.putExtra(Constants.KEY_USER, user);
-//                startActivity(intent);
+        mMap.setOnInfoWindowClickListener( marker -> {
+            int adIndex = Integer.parseInt(marker.getSnippet());
+            Ad ad = ads.get(adIndex);
 
-            }
+            Intent intent = new Intent(MapsActivity.this, FullAdInfoActivity.class);
+            intent.putExtra(Constants.KEY_AD, ad);
+            startActivity(intent);
         });
-        listenAds();
     }
 
     public static Bitmap getBitmapFromDrawable(Context context, @DrawableRes int drawableId) {
@@ -428,10 +424,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         binding.fabAddToFav.setVisibility(View.VISIBLE);
         binding.fabStartChat.setVisibility(View.VISIBLE);
         currentMarker = marker;
-
         return false;
     }
-
 
     @Override
     public void onMapClick(@NonNull LatLng latLng) {

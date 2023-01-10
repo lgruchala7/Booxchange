@@ -15,13 +15,13 @@
         app:layout_constraintTop_toTopOf="parent"
         app:riv_oval="true" />
 
-    <View
-        android:id="@+id/view_supporter"
-        android:layout_width="1dp"
-        android:layout_height="1dp"
-        app:layout_constraintBottom_toBottomOf="@id/image_profile"
-        app:layout_constraintEnd_toEndOf="@id/image_profile"
-        app:layout_constraintTop_toTopOf="@id/image_profile" />
+<!--    <View-->
+<!--        android:id="@+id/view_supporter"-->
+<!--        android:layout_width="1dp"-->
+<!--        android:layout_height="1dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/image_profile"-->
+<!--        app:layout_constraintEnd_toEndOf="@id/image_profile"-->
+<!--        app:layout_constraintTop_toTopOf="@id/image_profile" />-->
 
     <TextView
         android:id="@+id/text_title"

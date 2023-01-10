@@ -1,5 +1,7 @@
 package com.example.booxchange.activities;
 
+import static android.view.View.VISIBLE;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -83,7 +85,7 @@ public class FriendsActivity extends AppCompatActivity implements UserListener {
                                     User user = new User();
                                     user.name = queryDocumentSnapshot.getString(Constants.KEY_NAME);
                                     user.email = queryDocumentSnapshot.getString(Constants.KEY_EMAIL);
-                                    user.image = queryDocumentSnapshot.getString(Constants.KEY_IMAGE);
+                                    user.image = queryDocumentSnapshot.getString(Constants.KEY_USER_IMAGE);
                                     user.token = queryDocumentSnapshot.getString(Constants.KEY_FCM_TOKEN);
                                     user.id = queryDocumentSnapshot.getId();
                                     usersList.add(user);
@@ -92,7 +94,7 @@ public class FriendsActivity extends AppCompatActivity implements UserListener {
                             if (!usersList.isEmpty()) {
                                 UsersAdapter usersAdapter = new UsersAdapter(usersList, this);
                                 binding.usersRecyclerView.setAdapter(usersAdapter);
-                                binding.usersRecyclerView.setVisibility(View.VISIBLE);
+                                binding.usersRecyclerView.setVisibility(VISIBLE);
                             }
                             else {
                                 showErrorMessage();
@@ -106,12 +108,12 @@ public class FriendsActivity extends AppCompatActivity implements UserListener {
 
     private void showErrorMessage() {
         binding.textErrorMessage.setText(String.format("%s", "No user available"));
-        binding.textErrorMessage.setVisibility(View.VISIBLE);
+        binding.textErrorMessage.setVisibility(VISIBLE);
     }
 
     private void loading(Boolean isLoading) {
         if (isLoading) {
-            binding.progressBar.setVisibility(View.VISIBLE);
+            binding.progressBar.setVisibility(VISIBLE);
         }
         else {
             binding.progressBar.setVisibility(View.INVISIBLE);

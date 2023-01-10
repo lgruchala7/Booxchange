@@ -64,7 +64,7 @@
             android:layout_marginStart="@dimen/_24sdp"
             android:layout_marginEnd="@dimen/_24sdp"
             android:gravity="center"
-            android:textColor="@color/design_default_color_error"
+            android:textColor="@color/color_main_dark"
             android:textSize="@dimen/_12ssp"
             android:visibility="gone" />
 

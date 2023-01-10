@@ -58,7 +58,7 @@ public class FavoriteItemsAdapter extends RecyclerView.Adapter<FavoriteItemsAdap
 
         void setData(Ad ad) {
             binding.imageProfile.setImageBitmap(getConversionImage(ad.images.get(0)));
-            binding.textTitle.setText("\"" + ad.title + "\"");
+            binding.textTitle.setText(ad.title);
             binding.textAuthor.setText(ad.author);
             binding.textUserName.setText("@" + ad.userName);
             binding.getRoot().setOnClickListener(v -> {

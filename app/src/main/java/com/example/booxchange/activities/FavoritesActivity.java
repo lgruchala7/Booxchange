@@ -2,6 +2,7 @@ package com.example.booxchange.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -99,6 +100,7 @@ public class FavoritesActivity extends AppCompatActivity implements AdListener {
                                     ad.userId = queryDocumentSnapshot.getString(Constants.KEY_USER_ID);
                                     ad.userName = queryDocumentSnapshot.getString(Constants.KEY_NAME);
                                     ad.userImage = queryDocumentSnapshot.getString(Constants.KEY_USER_IMAGE);
+                                    ad.userEmail = queryDocumentSnapshot.getString(Constants.KEY_EMAIL);
                                     adList.add(ad);
                                 }
                             }
@@ -117,9 +119,13 @@ public class FavoritesActivity extends AppCompatActivity implements AdListener {
                         }
                     });
         }
+        else {
+            showErrorMessage();
+        }
     }
 
     private void showErrorMessage() {
+        loading(false);
         binding.textErrorMessage.setText(String.format("%s", "No ads available"));
         binding.textErrorMessage.setVisibility(View.VISIBLE);
     }
@@ -139,6 +145,8 @@ public class FavoritesActivity extends AppCompatActivity implements AdListener {
 
     @Override
     public void onAdClicked(Ad ad) {
-        //TODO
+        Intent intent = new Intent(FavoritesActivity.this, FullAdInfoActivity.class);
+        intent.putExtra(Constants.KEY_AD, ad);
+        startActivity(intent);
     }
 }

@@ -28,43 +28,23 @@
             android:paddingStart="@dimen/_8sdp"
             android:orientation="vertical">
 
-<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content">-->
+            <TextView
+                android:id="@+id/text_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="&quot;Book Title&quot;"
+                android:textStyle="bold|italic"
+                android:textSize="@dimen/_13ssp"
+                android:singleLine="false"/>
 
-                <TextView
-                    android:id="@+id/text_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="&quot;Book Title&quot;"
-                    android:textStyle="bold|italic"
-                    android:textSize="@dimen/_13ssp"
-                    android:singleLine="false"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
-
-                <TextView
-                    android:id="@+id/text_author"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Author's Name"
-                    android:textStyle="italic"
-                    android:textSize="@dimen/_13ssp"
-                    android:singleLine="false"
-                    app:layout_constraintStart_toEndOf="@id/text_title"
-                    app:layout_constraintTop_toTopOf="parent"/>
-
-<!--                <androidx.appcompat.widget.AppCompatImageView-->
-<!--                    android:id="@+id/image_chat"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:src="@drawable/ic_message"-->
-<!--                    android:tint="@color/color_main_dark"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"/>-->
-
-<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+            <TextView
+                android:id="@+id/text_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Author's Name"
+                android:textStyle="italic"
+                android:textSize="@dimen/_13ssp"
+                android:singleLine="false"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -73,7 +53,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Genre: "
+                    android:text="Genre:"
                     android:textSize="@dimen/_10ssp"
                     android:textStyle="bold"/>
 
@@ -94,7 +74,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Condition: "
+                    android:text="Condition:"
                     android:textStyle="bold"
                     android:textSize="@dimen/_10ssp"/>
 
@@ -118,7 +98,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="City: "
+                    android:text="City:"
                     android:textStyle="bold"
                     android:textSize="@dimen/_10ssp"/>
 
@@ -140,7 +120,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Address: "
+                    android:text="Address:"
                     android:textStyle="bold"
                     android:textSize="@dimen/_10ssp"/>
 

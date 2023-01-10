@@ -93,6 +93,13 @@ public class LastChatsActivity extends AppCompatActivity implements ConversionLi
                         String senderId = documentChange.getDocument().getString(Constants.KEY_SENDER_ID);
                         String receiverId = documentChange.getDocument().getString(Constants.KEY_RECEIVER_ID);
                         if (conversations.get(i).senderId.equals(senderId) && conversations.get(i).receiverId.equals(receiverId)) {
+                            if (preferenceManager.getString(Constants.KEY_USER_ID).equals(senderId)) {
+                                conversations.get(i).conversionImage = documentChange.getDocument().getString(Constants.KEY_RECEIVER_IMAGE);
+                            }
+                            else {
+                                conversations.get(i).conversionImage = documentChange.getDocument().getString(Constants.KEY_SENDER_IMAGE);
+
+                            }
                             conversations.get(i).message = documentChange.getDocument().getString(Constants.KEY_LAST_MESSAGE);
                             conversations.get(i).dateObject = documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP);
                             break;
