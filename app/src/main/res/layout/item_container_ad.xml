@@ -69,5 +69,20 @@
         app:layout_constraintBottom_toBottomOf="@id/image_profile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/image_profile" />
+    <TextView
+        android:id="@+id/text_publish_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/secondary_text"
+        android:textSize="@dimen/_10ssp"
+        android:text="\@user_name_1234"
+        app:layout_constraintBottom_toBottomOf="@id/image_profile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/image_profile"
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

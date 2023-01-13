@@ -10,6 +10,7 @@ import android.util.Base64;
 import android.widget.Toast;
 
 import com.example.booxchange.databinding.ActivityAccountBinding;
+import com.example.booxchange.models.User;
 import com.example.booxchange.utilities.Constants;
 import com.example.booxchange.utilities.PreferenceManager;
 import com.google.firebase.firestore.DocumentReference;
@@ -36,7 +37,8 @@ public class AccountActivity extends AppCompatActivity {
     }
 
     private void init() {
-        for (int i = 0; i < binding.chipNavigationBar.getChildCount(); i++) {
+        int menuItemCount = binding.chipNavigationBar.getChildCount();
+        for (int i = 0; i < menuItemCount; i++) {
             switch (i) {
                 case 0:
                     Constants.MENU_HOME = binding.chipNavigationBar.getChildAt(i).getId();
@@ -74,10 +76,16 @@ public class AccountActivity extends AppCompatActivity {
         });
 
         binding.layoutGoToMyAds.setOnClickListener(v -> {
-            //TODO
+            startActivity(new Intent(AccountActivity.this, MyAdsActivity.class));
         });
         binding.layoutGoToUserInfo.setOnClickListener(v -> {
-            //TODO
+            User user = new User(preferenceManager.getString(Constants.KEY_USER_ID),
+                    preferenceManager.getString(Constants.KEY_NAME),
+                    preferenceManager.getString(Constants.KEY_USER_IMAGE));
+            Intent intent = new Intent(AccountActivity.this, UserInfoActivity.class);
+            intent.putExtra(Constants.KEY_USER, user);
+            startActivity(intent);
+//            overridePendingTransition(0, 0);
         });
         binding.layoutSignOut.setOnClickListener( v -> signOut() );
     }

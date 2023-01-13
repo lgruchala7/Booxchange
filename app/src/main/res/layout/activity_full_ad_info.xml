@@ -1,304 +1,350 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".activities.FullAdInfoActivity">
 
-        <ScrollView
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/image_back"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginLeft="@dimen/_16sdp"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:padding="@dimen/_5sdp"
+        android:src="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:tint="@color/color_main_dark" />
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:clipToPadding="false"
         android:overScrollMode="never"
+        android:layout_marginTop="@dimen/_16sdp"
         android:padding="@dimen/_24sdp"
         android:scrollbars="none"
-        android:background="@color/white"
+        android:background="@drawable/background_content_bottom"
         android:fillViewport="true"
-        tools:context=".activities.FullAdInfoActivity">
+        app:layout_constraintTop_toBottomOf="@id/image_back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:background="@drawable/background_input">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/adImagesRecyclerView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+            </FrameLayout>
 
             <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/image_back"
-                        android:layout_width="@dimen/_30sdp"
-                        android:layout_height="@dimen/_30sdp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:background="@drawable/icon_background"
-                        android:padding="@dimen/_5sdp"
-                        android:src="@drawable/ic_back"
-                        android:tint="@color/search_background" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_16sdp"
-                    android:background="@drawable/background_input">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/adImagesRecyclerView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:orientation="horizontal"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-
-                </FrameLayout>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:background="@drawable/background_input"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
 
-                    <RelativeLayout
+                    <include
+                        android:id="@+id/user_info"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_16sdp"
-                        android:background="@drawable/background_input"
-                        android:gravity="center_vertical">
+                        android:layout_weight="1"
+                        layout="@layout/item_container_user" />
 
-                        <include
-                            android:id="@+id/user_info"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            layout="@layout/item_container_user" />
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/image_chat"
+                        android:layout_width="@dimen/_35sdp"
+                        android:layout_height="@dimen/_35sdp"
+                        android:layout_centerVertical="true"
+                        android:padding="@dimen/_5sdp"
+                        android:src="@drawable/ic_message"
+                        android:tint="@color/color_main_dark" />
 
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/image_chat"
-                            android:layout_width="@dimen/_30sdp"
-                            android:layout_height="@dimen/_30sdp"
-                            android:layout_centerVertical="true"
-                            android:layout_alignParentEnd="true"
-                            android:layout_marginEnd="@dimen/_8sdp"
-                            android:background="@drawable/icon_background"
-                            android:padding="@dimen/_5sdp"
-                            android:src="@drawable/ic_message"
-                            android:tint="@color/search_background" />
-
-                    </RelativeLayout>
-
-                    <TextView
-                        android:id="@+id/text_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:paddingStart="@dimen/_8sdp"
-                        android:text="&quot;Title&quot;"
-                        android:textColor="@color/primary_text"
-                        android:textStyle="bold|italic"
-                        android:textSize="@dimen/_18ssp" />
-
-                    <TextView
-                        android:id="@+id/text_author"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="@dimen/_8sdp"
-                        android:text="Author's Name"
-                        android:textColor="@color/primary_text"
-                        android:textStyle="italic"
-                        android:textSize="@dimen/_18ssp" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_12sdp"
-                        android:orientation="vertical"
-                        android:paddingVertical="@dimen/_4sdp"
-                        android:background="@drawable/empty_rectangle_background">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:paddingVertical="@dimen/_4sdp"
-                            android:paddingHorizontal="@dimen/_8sdp"
-                            android:gravity="center_vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="@dimen/_14ssp"
-                                android:textColor="@color/secondary_text"
-                                android:text="Genre:"
-                                android:textStyle="bold"/>
-
-                            <TextView
-                                android:id="@+id/text_genre"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_6sdp"
-                                android:textSize="@dimen/_14ssp"
-                                android:textColor="@color/secondary_text"
-                                android:text="Tragedy"
-                                android:gravity="right"/>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:gravity="center_vertical"
-                            android:paddingStart="@dimen/_8sdp"
-                            android:layout_marginEnd="@dimen/_4sdp"
-                            android:layout_weight="1">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Condition: "
-                                android:textStyle="bold"
-                                android:textSize="@dimen/_14ssp"
-                                android:textColor="@color/secondary_text"/>
-
-                            <RelativeLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="@dimen/_27ssp">
-                                <RatingBar
-                                    android:id="@+id/rating_bar_condition"
-                                    style="?android:attr/ratingBarStyleIndicator"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:stepSize="1"
-                                    android:numStars="5"
-                                    android:isIndicator="true"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_alignParentEnd="true"/>
-
-                            </RelativeLayout>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:paddingVertical="@dimen/_4sdp"
-                            android:paddingHorizontal="@dimen/_8sdp"
-                            android:layout_weight="1">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="@dimen/_14ssp"
-                                android:textColor="@color/secondary_text"
-                                android:text="City:"
-                                android:textStyle="bold"/>
-
-                            <TextView
-                                android:id="@+id/text_city"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_4sdp"
-                                android:textSize="@dimen/_14ssp"
-                                android:textColor="@color/secondary_text"
-                                android:text="Lisbon"
-                                android:gravity="right"/>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:paddingVertical="@dimen/_4sdp"
-                            android:paddingHorizontal="@dimen/_8sdp"
-                            android:layout_weight="1">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="@dimen/_14ssp"
-                                android:textColor="@color/secondary_text"
-                                android:text="Address:"
-                                android:textStyle="bold"/>
-
-                            <TextView
-                                android:id="@+id/text_address"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_4sdp"
-                                android:textSize="@dimen/_14ssp"
-                                android:textColor="@color/secondary_text"
-                                android:text="Av. Casal Ribeiro 21B"
-                                android:gravity="right"/>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:paddingVertical="@dimen/_4sdp"
-                            android:paddingHorizontal="@dimen/_8sdp"
-                            android:layout_weight="1">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="@dimen/_14ssp"
-                                android:textColor="@color/secondary_text"
-                                android:text="Date:"
-                                android:textStyle="bold"/>
-
-                            <TextView
-                                android:id="@+id/text_date_time"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_4sdp"
-                                android:textSize="@dimen/_14ssp"
-                                android:textColor="@color/secondary_text"
-                                android:text="Jan 8, 2023"
-                                android:gravity="right"/>
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/text_description"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_16sdp"
-                        android:background="@drawable/background_input"
-                        android:gravity="start"
-                        android:padding="@dimen/_8sdp"
-                        android:text="Description of a book, can be more than one line long"
-                        android:textColor="@color/secondary_text"
-                        android:textSize="@dimen/_13ssp"
-                        android:maxLength="200"/>
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/image_see_profile"
+                        android:layout_width="@dimen/_35sdp"
+                        android:layout_height="@dimen/_35sdp"
+                        android:layout_centerVertical="true"
+                        android:padding="@dimen/_5sdp"
+                        android:src="@drawable/ic_person"
+                        android:tint="@color/color_main_dark" />
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/text_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:paddingStart="@dimen/_8sdp"
+                            android:text="&quot;Title&quot;"
+                            android:textColor="@color/primary_text"
+                            android:textStyle="bold|italic"
+                            android:textSize="@dimen/_18ssp" />
+
+                        <TextView
+                            android:id="@+id/text_author"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="@dimen/_8sdp"
+                            android:text="Author's Name"
+                            android:textColor="@color/primary_text"
+                            android:textStyle="italic"
+                            android:textSize="@dimen/_18ssp" />
+
+                    </LinearLayout>
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/image_add_to_favorites"
+                            android:layout_width="@dimen/_35sdp"
+                            android:layout_height="@dimen/_35sdp"
+                            android:padding="@dimen/_5sdp"
+                            android:src="@drawable/ic_favorite_empty"
+                            android:tint="@color/color_main_dark" />
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/image_remove_from_favorites"
+                            android:layout_width="@dimen/_35sdp"
+                            android:layout_height="@dimen/_35sdp"
+                            android:padding="@dimen/_5sdp"
+                            android:src="@drawable/ic_favorite"
+                            android:tint="@color/color_main_dark"
+                            android:visibility="gone"/>
+
+                    </FrameLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:orientation="vertical"
+                    android:paddingVertical="@dimen/_4sdp"
+                    android:background="@drawable/empty_rectangle_background">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:paddingVertical="@dimen/_4sdp"
+                        android:paddingHorizontal="@dimen/_8sdp"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/_14ssp"
+                            android:textColor="@color/secondary_text"
+                            android:text="Genre:"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/text_genre"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_6sdp"
+                            android:textSize="@dimen/_14ssp"
+                            android:textColor="@color/secondary_text"
+                            android:text="Tragedy"
+                            android:gravity="right"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:gravity="center_vertical"
+                        android:paddingStart="@dimen/_8sdp"
+                        android:layout_marginEnd="@dimen/_4sdp"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Condition: "
+                            android:textStyle="bold"
+                            android:textSize="@dimen/_14ssp"
+                            android:textColor="@color/secondary_text"/>
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/_27ssp">
+                            <RatingBar
+                                android:id="@+id/rating_bar_condition"
+                                style="?android:attr/ratingBarStyleIndicator"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:stepSize="1"
+                                android:numStars="5"
+                                android:isIndicator="true"
+                                android:layout_gravity="center_vertical"
+                                android:layout_alignParentEnd="true"/>
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:paddingVertical="@dimen/_4sdp"
+                        android:paddingHorizontal="@dimen/_8sdp"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/_14ssp"
+                            android:textColor="@color/secondary_text"
+                            android:text="City:"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/text_city"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_4sdp"
+                            android:textSize="@dimen/_14ssp"
+                            android:textColor="@color/secondary_text"
+                            android:text="Lisbon"
+                            android:gravity="right"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:paddingVertical="@dimen/_4sdp"
+                        android:paddingHorizontal="@dimen/_8sdp"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/_14ssp"
+                            android:textColor="@color/secondary_text"
+                            android:text="Address:"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/text_address"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_4sdp"
+                            android:textSize="@dimen/_14ssp"
+                            android:textColor="@color/secondary_text"
+                            android:text="Av. Casal Ribeiro 21B"
+                            android:gravity="right"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:paddingVertical="@dimen/_4sdp"
+                        android:paddingHorizontal="@dimen/_8sdp"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/_14ssp"
+                            android:textColor="@color/secondary_text"
+                            android:text="Date:"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/text_date_time"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_4sdp"
+                            android:textSize="@dimen/_14ssp"
+                            android:textColor="@color/secondary_text"
+                            android:text="Jan 8, 2023"
+                            android:gravity="right"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/text_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:background="@drawable/background_input"
+                    android:gravity="start"
+                    android:padding="@dimen/_8sdp"
+                    android:text="Description of a book, can be more than one line long"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="@dimen/_13ssp"
+                    android:maxLength="200"/>
+
             </LinearLayout>
 
-    </ScrollView>
+        </LinearLayout>
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/image_full_screen"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#D0000000"
-            android:visibility="gone"
-            android:padding="@dimen/_8sdp"
-            android:src="@drawable/ic_message" />
+</ScrollView>
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/image_close"
-            android:layout_width="@dimen/_30sdp"
-            android:layout_height="@dimen/_30sdp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="@dimen/_16sdp"
-            android:layout_marginEnd="@dimen/_16sdp"
-            android:src="@drawable/ic_close"
-            app:tint="@color/white"
-            android:visibility="gone" />
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/image_full_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#D0000000"
+        android:visibility="gone"
+        android:padding="@dimen/_8sdp" />
 
-</RelativeLayout>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/image_close"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:layout_marginEnd="@dimen/_16sdp"
+        android:src="@drawable/ic_close"
+        app:tint="@color/white"
+        android:visibility="gone" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

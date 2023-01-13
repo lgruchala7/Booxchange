@@ -78,7 +78,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_12sdp"
                     android:orientation="vertical"
-                    android:paddingVertical="@dimen/_4sdp">
+                    android:paddingVertical="@dimen/_4sdp"
+                    android:paddingStart="@dimen/_8sdp">
 
                     <RelativeLayout
                         android:id="@+id/layout_go_to_my_ads"
@@ -119,7 +120,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_12sdp"
                     android:orientation="vertical"
-                    android:paddingVertical="@dimen/_4sdp">
+                    android:paddingVertical="@dimen/_4sdp"
+                    android:paddingStart="@dimen/_8sdp">
 
                     <RelativeLayout
                         android:id="@+id/layout_go_to_user_info"
@@ -160,7 +162,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_12sdp"
                     android:orientation="vertical"
-                    android:paddingVertical="@dimen/_4sdp">
+                    android:paddingVertical="@dimen/_4sdp"
+                    android:paddingStart="@dimen/_8sdp">
 
                     <RelativeLayout
                         android:id="@+id/layout_sign_out"
@@ -204,30 +207,19 @@
 
     </ScrollView>
 
-    <FrameLayout
+    <LinearLayout
+        android:id="@+id/layout_chip_navigation_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@color/search_background">
-        <!--        app:layout_constraintTop_toBottomOf="@id/container_dashboard"-->
+        android:orientation="vertical">
 
-<!--        <me.ibrahimsn.lib.SmoothBottomBar-->
-<!--            android:id="@+id/smooth_bottom_bar"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="@dimen/_60sdp"-->
-<!--            android:layout_marginStart="@dimen/_8sdp"-->
-<!--            android:layout_marginEnd="@dimen/_8sdp"-->
-<!--            android:layout_marginBottom="@dimen/_8sdp"-->
-<!--            app:backgroundColor="@color/search_background"-->
-<!--            app:iconSize="@dimen/_20sdp"-->
-<!--            app:iconTint="@color/bottom_bar_icon_tint"-->
-<!--            app:iconTintActive="@color/bottom_bar_icon_tint_active"-->
-<!--            app:indicatorColor="@color/bottom_bar_indicator_color"-->
-<!--            app:indicatorRadius="@dimen/_8sdp"-->
-<!--            app:menu="@menu/menu_bottom_navigation"-->
-<!--            app:textColor="@color/bottom_bar_text_color"-->
-<!--            app:textSize="@dimen/_10ssp"-->
-<!--            app:activeItem="2" />-->
+        <View
+            android:id="@+id/view_supporter"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_main_dark"
+            app:layout_constraintTop_toBottomOf="@id/image_back" />
 
         <com.ismaeldivita.chipnavigation.ChipNavigationBar
             android:id="@+id/chip_navigation_bar"
@@ -236,6 +228,6 @@
             android:background="@color/search_background"
             app:cnb_menuResource="@menu/menu_bottom_navigation" />
 
-    </FrameLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

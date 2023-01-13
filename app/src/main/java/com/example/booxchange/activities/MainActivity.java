@@ -77,24 +77,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setListeners() {
-//        binding.smoothBottomBar.setOnItemSelectedListener(new OnItemSelectedListener() {
-//            @Override
-//            public boolean onItemSelect(int i) {
-//                switch (i) {
-//                case Constants.MENU_MAP:
-//                    startActivity(new Intent(MainActivity.this, MapsActivity.class));
-//                    overridePendingTransition(0, 0);
-//                    finish();
-//                    break;
-//                case Constants.MENU_ACCOUNT:
-//                    startActivity(new Intent(MainActivity.this, AccountActivity.class));
-//                    overridePendingTransition(0, 0);
-//                    finish();
-//                    break;
-//                }
-//                return false;
-//            }
-//        });
         binding.chipNavigationBar.setOnItemSelectedListener(i -> {
                 if (i == Constants.MENU_MAP) {
                     startActivity(new Intent(MainActivity.this, MapsActivity.class));

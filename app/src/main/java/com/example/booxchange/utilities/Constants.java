@@ -37,4 +37,5 @@ public class Constants {
     public static final String KEY_USER_IMAGE = "userImage";
     public static final String KEY_FRIENDS = "friends";
     public static final String KEY_AD = "ad";
+    public static final String KEY_COUNTRY = "country";
 }

@@ -57,7 +57,8 @@ public class FriendsActivity extends AppCompatActivity implements UserListener {
                     if (task.isSuccessful() && task.getResult() != null) {
                         DocumentSnapshot documentSnapshot = task.getResult();
                         try {
-                            usersIdsList.addAll((ArrayList<String>) documentSnapshot.getData().get(Constants.KEY_FRIENDS));
+                            usersIdsList.addAll((ArrayList<String>) documentSnapshot.get(Constants.KEY_FRIENDS));
+//                            usersIdsList.addAll((ArrayList<String>) documentSnapshot.getData().get(Constants.KEY_FRIENDS));
                             getUsers(usersIdsList);
                         } catch (NullPointerException e) {
                             showErrorMessage();

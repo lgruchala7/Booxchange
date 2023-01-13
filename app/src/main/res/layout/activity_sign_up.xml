@@ -66,7 +66,7 @@
             android:textSize="@dimen/_13ssp" />
 
         <EditText
-            android:id="@+id/input_new_email"
+            android:id="@+id/input_email"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_45sdp"
             android:layout_marginTop="@dimen/_16sdp"
@@ -79,6 +79,23 @@
             android:paddingEnd="@dimen/_16sdp"
             android:textColor="@color/primary_text"
             android:textSize="@dimen/_13ssp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:imeOptions="actionNext"
+            android:hint="Country"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu" >
+
+            <AutoCompleteTextView
+                android:id="@+id/input_country"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:textSize="@dimen/_13ssp"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <EditText
             android:id="@+id/input_password"

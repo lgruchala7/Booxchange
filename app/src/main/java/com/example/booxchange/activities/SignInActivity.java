@@ -15,7 +15,10 @@ import com.example.booxchange.utilities.PreferenceManager;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -62,6 +65,8 @@ public class SignInActivity extends AppCompatActivity {
                         preferenceManager.putString(Constants.KEY_NAME, documentSnapshot.getString(Constants.KEY_NAME));
                         preferenceManager.putString(Constants.KEY_USER_IMAGE, documentSnapshot.getString(Constants.KEY_IMAGE));
                         preferenceManager.putString(Constants.KEY_EMAIL, documentSnapshot.getString(Constants.KEY_EMAIL));
+                        String dateTime = getReadableDateTime(documentSnapshot.getDate(Constants.KEY_TIMESTAMP));
+                        preferenceManager.putString(Constants.KEY_TIMESTAMP, dateTime);
                         Intent intent = new Intent(getApplicationContext(), SplashScreen.class);
                         startActivity(intent);
                         finish();
@@ -117,5 +122,9 @@ public class SignInActivity extends AppCompatActivity {
             binding.progressBar.setVisibility(View.INVISIBLE);
             binding.buttonSignIn.setVisibility(View.VISIBLE);
         }
+    }
+
+    private String getReadableDateTime(Date date) {
+        return new SimpleDateFormat("dd MMMM, yyyy - kk:mm", Locale.getDefault()).format(date);
     }
 }

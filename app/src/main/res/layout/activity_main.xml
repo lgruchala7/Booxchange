@@ -42,13 +42,13 @@
         app:layout_constraintTop_toBottomOf="@id/layout_header"
         app:layout_constraintBottom_toBottomOf="parent"
         android:paddingTop="@dimen/_8sdp"
-        android:paddingHorizontal="@dimen/_8sdp"
         android:background="@drawable/background_content_bottom">
 
         <GridLayout
             android:id="@+id/container_dashboard"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:paddingHorizontal="@dimen/_8sdp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/layout_chip_navigation_bar"
             android:rowCount="3"
@@ -171,7 +171,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Followed users"
+                    android:text="Friends"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_15ssp"
                     android:textStyle="bold"/>
@@ -249,12 +249,13 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:orientation="vertical">
 
-            <ImageView
+            <View
+                android:id="@+id/view_supporter"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_2sdp"
+                android:layout_height="1dp"
                 android:layout_marginTop="@dimen/_8sdp"
-                android:src="@drawable/background_line"
-                app:tint="@color/color_main_dark"/>
+                android:background="@color/color_main_dark"
+                app:layout_constraintTop_toBottomOf="@id/image_back" />
 
             <com.ismaeldivita.chipnavigation.ChipNavigationBar
                 android:id="@+id/chip_navigation_bar"

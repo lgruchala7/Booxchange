@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -11,19 +12,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.booxchange.databinding.ItemContainerAdBinding;
 import com.example.booxchange.listeners.AdListener;
-import com.example.booxchange.listeners.AdListener;
 import com.example.booxchange.models.Ad;
+import com.example.booxchange.utilities.PreferenceManager;
 
 import java.util.List;
 
-public class FavoriteItemsAdapter extends RecyclerView.Adapter<FavoriteItemsAdapter.ConversionViewHolder>{
+public class AdsMiniaturesAdapter extends RecyclerView.Adapter<AdsMiniaturesAdapter.ConversionViewHolder>{
 
     private final List<Ad> adList;
     private final AdListener adListener;
+    private final boolean isMyAdList;
 
-    public FavoriteItemsAdapter(List<Ad> adList, AdListener adListener) {
+    public AdsMiniaturesAdapter(List<Ad> adList, AdListener adListener, boolean isMyAdList) {
         this.adList = adList;
         this.adListener = adListener;
+        this.isMyAdList = isMyAdList;
     }
 
     @NonNull
@@ -60,7 +63,16 @@ public class FavoriteItemsAdapter extends RecyclerView.Adapter<FavoriteItemsAdap
             binding.imageProfile.setImageBitmap(getConversionImage(ad.images.get(0)));
             binding.textTitle.setText(ad.title);
             binding.textAuthor.setText(ad.author);
-            binding.textUserName.setText("@" + ad.userName);
+            if (isMyAdList) {
+                binding.textUserName.setVisibility(View.GONE);
+                binding.textPublishDate.setText(ad.dateTime.split("-")[0]);
+                binding.textPublishDate.setVisibility(View.VISIBLE);
+            }
+            else {
+                binding.textPublishDate.setVisibility(View.GONE);
+                binding.textUserName.setText("@" + ad.userName);
+                binding.textUserName.setVisibility(View.VISIBLE);
+            }
             binding.getRoot().setOnClickListener(v -> {
                 adListener.onAdClicked(ad);
             });

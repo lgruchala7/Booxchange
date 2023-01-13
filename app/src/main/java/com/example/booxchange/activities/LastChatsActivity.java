@@ -126,7 +126,7 @@ public class LastChatsActivity extends AppCompatActivity implements ConversionLi
 
     @Override
     public void onConversionClicked(User user) {
-        Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+        Intent intent = new Intent(getApplicationContext(), UserInfoActivity.class);
         intent.putExtra(Constants.KEY_USER, user);
         startActivity(intent);
     }

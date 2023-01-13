@@ -30,12 +30,11 @@
                     android:id="@+id/image_back"
                     android:layout_width="@dimen/_30sdp"
                     android:layout_height="@dimen/_30sdp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:background="@drawable/icon_background"
                     android:padding="@dimen/_5sdp"
                     android:src="@drawable/ic_back"
-                    android:tint="@color/search_background" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:tint="@color/color_main_dark" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -43,6 +42,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     android:text="Fill in ad info"
                     android:textColor="@color/primary_label"
                     android:textSize="@dimen/_18ssp"

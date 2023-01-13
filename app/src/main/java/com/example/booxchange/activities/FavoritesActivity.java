@@ -6,14 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.booxchange.adapters.FavoriteItemsAdapter;
+import com.example.booxchange.adapters.AdsMiniaturesAdapter;
 import com.example.booxchange.databinding.ActivityFavoritesBinding;
 import com.example.booxchange.listeners.AdListener;
 import com.example.booxchange.models.Ad;
-import com.example.booxchange.models.User;
 import com.example.booxchange.utilities.Constants;
 import com.example.booxchange.utilities.PreferenceManager;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -44,7 +42,7 @@ public class FavoritesActivity extends AppCompatActivity implements AdListener {
 
     private void init() {
 //        favoriteItems = new ArrayList<>();
-//        favoriteItemsAdapter = new FavoriteItemsAdapter(favoriteItems, this);
+//        favoriteItemsAdapter = new AdsMiniaturesAdapter(favoriteItems, this);
 //        binding.adsRecyclerView.setAdapter(favoriteItemsAdapter);
         database = FirebaseFirestore.getInstance();
     }
@@ -106,8 +104,8 @@ public class FavoritesActivity extends AppCompatActivity implements AdListener {
                             }
                             if (!adList.isEmpty()) {
                                 Collections.sort(adList, (obj1, obj2) -> obj2.dateObject.compareTo(obj1.dateObject));
-                                FavoriteItemsAdapter favoriteItemsAdapter = new FavoriteItemsAdapter(adList, this);
-                                binding.adsRecyclerView.setAdapter(favoriteItemsAdapter);
+                                AdsMiniaturesAdapter adsMiniaturesAdapter = new AdsMiniaturesAdapter(adList, this, false);
+                                binding.adsRecyclerView.setAdapter(adsMiniaturesAdapter);
                                 binding.adsRecyclerView.setVisibility(View.VISIBLE);
                             }
                             else {

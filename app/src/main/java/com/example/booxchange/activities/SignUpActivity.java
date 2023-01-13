@@ -19,8 +19,11 @@ import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
+import com.example.booxchange.R;
 import com.example.booxchange.databinding.ActivityMainBinding;
 import com.example.booxchange.databinding.ActivitySignUpBinding;
 import com.example.booxchange.utilities.Constants;
@@ -30,6 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.HashMap;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -37,6 +41,7 @@ public class SignUpActivity extends AppCompatActivity {
     private ActivitySignUpBinding binding;
     private PreferenceManager preferenceManager;
     private String encodedImage;
+    private FirebaseFirestore database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +49,17 @@ public class SignUpActivity extends AppCompatActivity {
         binding = ActivitySignUpBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         preferenceManager = new PreferenceManager(getApplicationContext());
+        init();
         setListeners();
+    }
+
+    private void init() {
+        AutoCompleteTextView textViewGenre = binding.inputCountry;
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.countries, android.R.layout.simple_list_item_1);
+        adapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
+        textViewGenre.setAdapter(adapter);
+
+        database = FirebaseFirestore.getInstance();
     }
 
     private void setListeners() {
@@ -62,20 +77,18 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void showToast(String text) {
-//        SpannableString spannableString = new SpannableString(text);
-//        spannableString.setSpan(new ForegroundColorSpan(Color.GREEN), 0, spannableString.length(), 0);
-//        spannableString.setSpan(AbsoluteSizeSpan(200), 0, spannableString.length, 0);
         Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
     }
 
     private void signUp() {
         loading(true);
-        FirebaseFirestore database = FirebaseFirestore.getInstance();
         HashMap<String, Object> user = new HashMap<>();
         user.put(Constants.KEY_NAME, binding.inputName.getText().toString());
-        user.put(Constants.KEY_EMAIL, binding.inputNewEmail.getText().toString());
+        user.put(Constants.KEY_EMAIL, binding.inputEmail.getText().toString());
         user.put(Constants.KEY_PASSWORD, binding.inputPassword.getText().toString());
         user.put(Constants.KEY_USER_IMAGE, encodedImage);
+        Date date = new Date();
+        user.put(Constants.KEY_TIMESTAMP, date);
         database.collection(Constants.KEY_COLLECTION_USERS)
                 .add(user)
                 .addOnSuccessListener(documentReference -> {
@@ -84,6 +97,7 @@ public class SignUpActivity extends AppCompatActivity {
                     preferenceManager.putString(Constants.KEY_USER_ID, documentReference.getId());
                     preferenceManager.putString(Constants.KEY_NAME, binding.inputName.getText().toString());
                     preferenceManager.putString(Constants.KEY_USER_IMAGE, encodedImage);
+                    preferenceManager.putString(Constants.KEY_TIMESTAMP, date.toString());
                     Intent intent = new Intent(getApplicationContext(), SplashScreen.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
@@ -131,10 +145,10 @@ public class SignUpActivity extends AppCompatActivity {
         else if (binding.inputName.getText().toString().trim().isEmpty()) {
             showToast("Enter name");
         }
-        else if (binding.inputNewEmail.getText().toString().trim().isEmpty()) {
+        else if (binding.inputEmail.getText().toString().trim().isEmpty()) {
             showToast("Enter email");
         }
-        else if (!Patterns.EMAIL_ADDRESS.matcher(binding.inputNewEmail.getText().toString()).matches()) {
+        else if (!Patterns.EMAIL_ADDRESS.matcher(binding.inputEmail.getText().toString()).matches()) {
             showToast("Enter valid email address");
         }
         else if (binding.inputPassword.getText().toString().trim().isEmpty()) {
