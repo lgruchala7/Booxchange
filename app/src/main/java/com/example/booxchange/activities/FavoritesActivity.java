@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class FavoritesActivity extends AppCompatActivity implements AdListener {
+public class FavoritesActivity extends BaseActivity implements AdListener {
 
     private ActivityFavoritesBinding binding;
     private PreferenceManager preferenceManager;

@@ -49,6 +49,18 @@
                     android:textStyle="bold"
                     android:layout_gravity="center_horizontal"/>
 
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/image_photo"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:padding="@dimen/_5sdp"
+                    android:src="@drawable/ic_camera"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:tint="@color/color_main_dark" />
+
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -236,7 +248,8 @@
         android:layout_marginTop="@dimen/_16sdp"
         android:layout_marginEnd="@dimen/_16sdp"
         android:src="@drawable/ic_close"
-        app:tint="@color/white"
+        android:background="@drawable/background_image"
+        app:tint="@color/color_main_dark"
         android:visibility="gone" />
 
 </RelativeLayout>

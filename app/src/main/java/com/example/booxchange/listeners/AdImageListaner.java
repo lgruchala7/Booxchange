@@ -7,4 +7,5 @@ import androidx.appcompat.widget.AppCompatImageView;
 public interface AdImageListaner {
 //    void onAddPhotoClicked();
     void onAdImageClicked(View imageView);
+    void onDeleteIconClicked(View imageView);
 }

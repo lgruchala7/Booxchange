@@ -1,8 +1,10 @@
 package com.example.booxchange.activities;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class FullAdInfoActivity extends AppCompatActivity implements AdImageListaner {
+public class FullAdInfoActivity extends BaseActivity implements AdImageListaner {
 
     private ActivityFullAdInfoBinding binding;
     private Ad ad;
@@ -65,7 +67,7 @@ public class FullAdInfoActivity extends AppCompatActivity implements AdImageList
         binding.ratingBarCondition.setRating(Integer.parseInt(ad.condition));
         binding.textDescription.setText(ad.description);
 
-        adImagesAdapter = new AdImagesAdapter(ad.images, this);
+        adImagesAdapter = new AdImagesAdapter(ad.images, this, false);
         binding.adImagesRecyclerView.setAdapter(adImagesAdapter);
     }
 
@@ -86,6 +88,26 @@ public class FullAdInfoActivity extends AppCompatActivity implements AdImageList
         } );
         binding.imageAddToFavorites.setOnClickListener( v -> addToFavorites());
         binding.imageRemoveFromFavorites.setOnClickListener( v -> removeFromFavorites());
+        binding.imageDelete.setOnClickListener( v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Confirm removal")
+                .setMessage("Do you want to remove the ad permanently?")
+                .setCancelable(true)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        removeFromMyAds();
+                        onBackPressed();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .show();
+        });
     }
 
     private void init() {
@@ -101,7 +123,7 @@ public class FullAdInfoActivity extends AppCompatActivity implements AdImageList
     }
 
     private void findAdId() {
-        Task<QuerySnapshot> taskAdId = database.collection(Constants.KEY_COLLECTION_ADS)
+        database.collection(Constants.KEY_COLLECTION_ADS)
                 .whereEqualTo(Constants.KEY_USER_ID, ad.userId)
                 .whereEqualTo(Constants.KEY_TIMESTAMP, ad.dateObject)
                 .get()
@@ -109,14 +131,13 @@ public class FullAdInfoActivity extends AppCompatActivity implements AdImageList
     }
 
     private void checkIfAdFavorite(Task<QuerySnapshot> task) {
-            if (task.isSuccessful() && task.getResult() != null) {
-                adId = task.getResult().getDocuments().get(0).getId();
-
-                database.collection(Constants.KEY_COLLECTION_USERS)
-                        .document(preferenceManager.getString(Constants.KEY_USER_ID))
-                        .get()
-                        .addOnCompleteListener(newTask -> setImageFavoriteIndicator(newTask));
-            }
+        if (task.isSuccessful() && task.getResult() != null) {
+            adId = task.getResult().getDocuments().get(0).getId();
+            database.collection(Constants.KEY_COLLECTION_USERS)
+                    .document(preferenceManager.getString(Constants.KEY_USER_ID))
+                    .get()
+                    .addOnCompleteListener( getDocumentTask -> setImageFavoriteIndicator(getDocumentTask) );
+        }
     }
 
     private void setImageFavoriteIndicator(Task<DocumentSnapshot> task) {
@@ -218,8 +239,55 @@ public class FullAdInfoActivity extends AppCompatActivity implements AdImageList
             binding.imageRemoveFromFavorites.setVisibility(View.GONE);
             binding.imageAddToFavorites.setVisibility(View.GONE);
             binding.imageChat.setVisibility(View.GONE);
+            binding.imageDelete.setVisibility(View.VISIBLE);
         }
         return isMyProfile;
+    }
+
+    private void removeFromMyAds() {
+        if (adId == null) {
+            database.collection(Constants.KEY_COLLECTION_ADS)
+                    .whereEqualTo(Constants.KEY_USER_ID, ad.userId)
+                    .whereEqualTo(Constants.KEY_TIMESTAMP, ad.dateObject)
+                    .get()
+                    .addOnCompleteListener( getDocumentTask -> {
+                        if (getDocumentTask.isSuccessful() && getDocumentTask.getResult() != null) {
+                            adId = getDocumentTask.getResult().getDocuments().get(0).getId();
+                            database.collection(Constants.KEY_COLLECTION_ADS)
+                                    .document(adId)
+                                    .delete()
+                                    .addOnCompleteListener( task -> {
+                                        if (task.isSuccessful()) {
+                                            showToast("Ad successfully removed");
+                                        }
+                                        else {
+                                            showToast("Failed to remove ad");
+                                        }
+                                    } );
+                        }
+                        else {
+                            showToast("Failed to remove ad");
+                        }
+                    });
+        }
+        else {
+            database.collection(Constants.KEY_COLLECTION_ADS)
+                    .document(adId)
+                    .delete()
+                    .addOnCompleteListener( task -> {
+                        if (task.isSuccessful()) {
+                            showToast("Ad successfully removed");
+                        }
+                        else {
+                            showToast("Failed to remove ad");
+                        }
+                    } );
+        }
+    }
+
+    @Override
+    public void onDeleteIconClicked(View imageView) {
+        // NOT USED
     }
 
 }

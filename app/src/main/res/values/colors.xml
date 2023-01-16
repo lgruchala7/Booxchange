@@ -19,4 +19,5 @@
     <color name="favorite_background">#FF7173</color>
     <color name="ic_launcher_background">#d1f9f1</color>
     <color name="color_primary">#35B7CF</color>
+    <color name="green">#008000</color>
 </resources>

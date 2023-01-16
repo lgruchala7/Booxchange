@@ -1,5 +1,7 @@
 package com.example.booxchange.utilities;
 
+import java.util.HashMap;
+
 public class Constants {
     public static int MENU_HOME = 0;
     public static int MENU_MAP = 1;
@@ -38,4 +40,26 @@ public class Constants {
     public static final String KEY_FRIENDS = "friends";
     public static final String KEY_AD = "ad";
     public static final String KEY_COUNTRY = "country";
+    public static final String KEY_AVAILABILITY = "availability";
+    public static final String REMOTE_MSG_AUTHORIZATION = "Authorization";
+    public static final String REMOTE_MSG_CONTENT_TYPE = "Content-Type";
+    public static final String REMOTE_MSG_DATA = "data";
+    public static final String REMOTE_MSG_REGISTRATION_IDS = "registration_ids";
+
+    public static HashMap<String, String> remoteMsgHeaders = null;
+    public static HashMap<String, String> getRemoteMsgHeaders() {
+        if (remoteMsgHeaders == null) {
+            remoteMsgHeaders = new HashMap<>();
+            remoteMsgHeaders.put(
+                    REMOTE_MSG_AUTHORIZATION,
+                    "key=AAAA7PxYXB4:APA91bF8CGqEXO_5VlaTTrQ1su6dTb7ymAsRcbVrAMSKig2q4VGpFLqjtBF5-yYcB-h3SZ9ZYhEZfMW_g1ql-R0rFmCvAMuhPI2rdzUhoJJrlOsDW2IADdiF3-Fc2T1lDPtVnzVsLSTZ"
+            );
+            remoteMsgHeaders.put(
+                    REMOTE_MSG_CONTENT_TYPE,
+                    "application/json"
+            );
+        }
+        return remoteMsgHeaders;
+    };
+
 }

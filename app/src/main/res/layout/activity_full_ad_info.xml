@@ -151,6 +151,15 @@ tools:context=".activities.FullAdInfoActivity">
                             android:tint="@color/color_main_dark"
                             android:visibility="gone"/>
 
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/image_delete"
+                            android:layout_width="@dimen/_35sdp"
+                            android:layout_height="@dimen/_35sdp"
+                            android:padding="@dimen/_5sdp"
+                            android:src="@drawable/ic_delete"
+                            android:tint="@color/color_main_dark"
+                            android:visibility="gone"/>
+
                     </FrameLayout>
 
                 </LinearLayout>
@@ -339,12 +348,13 @@ tools:context=".activities.FullAdInfoActivity">
         android:id="@+id/image_close"
         android:layout_width="@dimen/_30sdp"
         android:layout_height="@dimen/_30sdp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="@dimen/_16sdp"
         android:layout_marginEnd="@dimen/_16sdp"
         android:src="@drawable/ic_close"
-        app:tint="@color/white"
+        android:background="@drawable/background_image"
+        app:tint="@color/color_main_dark"
         android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,13 +2,20 @@ package com.example.booxchange.activities;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -35,7 +42,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-public class NewAdActivity extends AppCompatActivity implements AdImageListaner {
+public class NewAdActivity extends BaseActivity implements AdImageListaner {
 
     private ActivityNewAdBinding binding;
     private ArrayList<String> encodedImages;
@@ -43,6 +50,7 @@ public class NewAdActivity extends AppCompatActivity implements AdImageListaner 
     private AdImagesAdapter adImagesAdapter;
 
     private static final int MAX_AD_IMAGES = 5;
+    private static final int REQUEST_CAMERA = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,17 +69,13 @@ public class NewAdActivity extends AppCompatActivity implements AdImageListaner 
 
         preferenceManager = new PreferenceManager(getApplicationContext());
 
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         Drawable d = getResources().getDrawable(R.drawable.ic_add_photo_w_padding, getTheme());
         Bitmap addPhotoIconBitmap = drawableToBitmap(d);
-        addPhotoIconBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        byte[] bytes = byteArrayOutputStream.toByteArray();
-        String addPhotoIconString = Base64.encodeToString(bytes, Base64.DEFAULT);
+        String addPhotoIconString = encodeImage(addPhotoIconBitmap);
         encodedImages = new ArrayList<>();
         encodedImages.add(addPhotoIconString);
-        adImagesAdapter = new AdImagesAdapter(encodedImages, this);
+        adImagesAdapter = new AdImagesAdapter(encodedImages, this, true);
         binding.adImagesRecyclerView.setAdapter(adImagesAdapter);
-//        adImagesAdapter.notifyDataSetChanged();
     }
 
     private void showToast(String text) {
@@ -85,27 +89,21 @@ public class NewAdActivity extends AppCompatActivity implements AdImageListaner 
                 publishAd();
             }
         });
-        binding.imageClose.setOnClickListener(v -> onBackPressed() );
-//        binding.imageAddPhoto.setOnClickListener(v -> {
-//            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//            pickImage.launch(intent);
-//        });
-//        binding.imageBook1.setOnClickListener(v -> {
-//            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//            pickImage.launch(intent);
-//        });
-//        binding.imageBook2.setOnClickListener(v -> {
-//            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//            pickImage.launch(intent);
-//        });
-//        binding.imageBook3.setOnClickListener(v -> {
-//            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//            pickImage.launch(intent);
-//        });
+        binding.imageClose.setOnClickListener( v -> onBackPressed() );
+        binding.imagePhoto.setOnClickListener( v -> {
+            requestCameraPermissions();
+        });
+    }
+
+    private void requestCameraPermissions() {
+        if (ContextCompat.checkSelfPermission(NewAdActivity.this,
+        Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(NewAdActivity.this, new String[]{
+                    Manifest.permission.CAMERA}, REQUEST_CAMERA);
+        }
+        else {
+            takePicture();
+        }
     }
 
     private String encodeImage(Bitmap bitmap) {
@@ -113,7 +111,7 @@ public class NewAdActivity extends AppCompatActivity implements AdImageListaner 
         int previewHeight = bitmap.getHeight() * previewWidth / bitmap.getWidth();
         Bitmap previewBitmap = Bitmap.createScaledBitmap(bitmap, previewWidth, previewHeight, false);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        previewBitmap.compress(Bitmap.CompressFormat.JPEG, 75, byteArrayOutputStream);
+        previewBitmap.compress(Bitmap.CompressFormat.PNG, 75, byteArrayOutputStream);
         byte[] bytes = byteArrayOutputStream.toByteArray();
         return Base64.encodeToString(bytes, Base64.DEFAULT);
     }
@@ -132,20 +130,67 @@ public class NewAdActivity extends AppCompatActivity implements AdImageListaner 
         return bitmap;
     }
 
+    private void takePicture() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        getPicture.launch(takePictureIntent);
+    }
+
+    private final ActivityResultLauncher<Intent> getPicture = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),   result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Bitmap pictureBitmap = (Bitmap) result.getData().getExtras().get("data");
+
+                        Matrix matrix = new Matrix();
+                        matrix.postRotate(90);
+                        Bitmap rotatedBitmap = Bitmap.createBitmap(pictureBitmap, 0, 0,
+                                pictureBitmap.getWidth(), pictureBitmap.getHeight(), matrix, true);
+
+                        if (rotatedBitmap != null) {
+                            String pictureString = encodeImage(rotatedBitmap);
+                            encodedImages.add(pictureString);
+                            adImagesAdapter.notifyDataSetChanged();
+                            binding.adImagesRecyclerView.smoothScrollToPosition(0);
+                        }
+                    }
+            }
+    );
+
     private final ActivityResultLauncher<Intent> pickImage = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), result -> {
                 if (result.getResultCode() == RESULT_OK) {
-                    if (result.getData() != null) {
-                        Uri imageUri = result.getData().getData();
+                    Intent data = result.getData();
+                    if (data.getClipData() != null) {
+                        int imageCount = data.getClipData().getItemCount();
+                        for (int i = 0; i < imageCount; i++) {
+                            try {
+                                Uri imageUri = data.getClipData().getItemAt(i).getUri();
+                                InputStream inputStream = getContentResolver().openInputStream(imageUri);
+                                Bitmap adImageBitmap = BitmapFactory.decodeStream(inputStream);
+                                encodedImages.add(encodeImage(adImageBitmap));
+
+                                if (encodedImages.size() == MAX_AD_IMAGES + 1) {
+                                    showToast("Max number of images");
+                                    break;
+                                }
+
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        adImagesAdapter.notifyDataSetChanged();
+                        binding.adImagesRecyclerView.smoothScrollToPosition(0);
+                        binding.adImagesRecyclerView.setVisibility(View.VISIBLE);
+                    }
+                    else if (data.getData() != null) {
                         try {
+                            Uri imageUri = data.getData();
                             InputStream inputStream = getContentResolver().openInputStream(imageUri);
                             Bitmap adImageBitmap = BitmapFactory.decodeStream(inputStream);
                             encodedImages.add(encodeImage(adImageBitmap));
-//                            Collections.swap(encodedImages, encodedImages.size() - 1, encodedImages.size() - 2);
 
                             adImagesAdapter.notifyDataSetChanged();
                             binding.adImagesRecyclerView.smoothScrollToPosition(0);
-//                            binding.adImagesRecyclerView.setVisibility(View.VISIBLE);
+                            binding.adImagesRecyclerView.setVisibility(View.VISIBLE);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
@@ -217,7 +262,7 @@ public class NewAdActivity extends AppCompatActivity implements AdImageListaner 
 //                    preferenceManager.putString(Constants.KEY_USER_ID, documentReference.getId());
 //                    preferenceManager.putString(Constants.KEY_NAME, binding.inputName.getText().toString().trim());
 //                    preferenceManager.putString(Constants.KEY_IMAGE, encodedImage);
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
 //                    finish();
@@ -228,24 +273,22 @@ public class NewAdActivity extends AppCompatActivity implements AdImageListaner 
                 });
     }
 
-        public void onAddPhotoClicked() {
+    public void onAddPhotoClicked() {
         if (encodedImages.size() < MAX_AD_IMAGES + 1) {
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
             pickImage.launch(intent);
         }
         else {
-            showToast("Max number of ad images");
+            showToast("Max number of images");
         }
     }
 
     @Override
     public void onAdImageClicked(View imageView) {
-        if (encodedImages.size() == 1 || imageView.getTag() == "image_add_photo") {
+        if (imageView.getTag() == "image_add_photo") {
             onAddPhotoClicked();
-            if (imageView.getTag() == null) {
-                imageView.setTag("image_add_photo");
-            }
         }
         else {
             AppCompatImageView imageFullScreen = binding.imageFullScreen;
@@ -254,6 +297,21 @@ public class NewAdActivity extends AppCompatActivity implements AdImageListaner 
             imageFullScreen.setImageBitmap(bitmap);
             imageFullScreen.setVisibility(View.VISIBLE);
             imageClose.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onDeleteIconClicked(View imageView) {
+        Object tag = imageView.getTag();
+        if (tag != null) {
+            try {
+                int index = (int) tag;
+                encodedImages.remove(index);
+                adImagesAdapter.notifyDataSetChanged();
+            } catch (ClassCastException e)
+            {
+                showToast("Could not delete the image");
+            }
         }
     }
 
@@ -268,6 +326,18 @@ public class NewAdActivity extends AppCompatActivity implements AdImageListaner 
         }
         else {
             super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_CAMERA:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    takePicture();
+                }
+                break;
         }
     }
 }

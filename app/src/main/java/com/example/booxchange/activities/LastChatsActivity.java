@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class LastChatsActivity extends AppCompatActivity implements ConversionListener {
+public class LastChatsActivity extends BaseActivity implements ConversionListener {
 
     private ActivityLastChatsBinding binding;
     private PreferenceManager preferenceManager;

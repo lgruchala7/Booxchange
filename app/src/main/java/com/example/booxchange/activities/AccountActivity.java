@@ -19,9 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 
-import me.ibrahimsn.lib.OnItemSelectedListener;
-
-public class AccountActivity extends AppCompatActivity {
+public class AccountActivity extends BaseActivity {
 
     private ActivityAccountBinding binding;
     private PreferenceManager preferenceManager;
@@ -69,7 +67,7 @@ public class AccountActivity extends AppCompatActivity {
                 finish();
             }
             else if (i == Constants.MENU_HOME) {
-                startActivity(new Intent(AccountActivity.this, MainActivity.class));
+                startActivity(new Intent(AccountActivity.this, HomeActivity.class));
                 overridePendingTransition(0, 0);
                 finish();
             }

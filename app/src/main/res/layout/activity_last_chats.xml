@@ -28,6 +28,7 @@
         android:textColor="@color/color_main_dark"
         android:textSize="@dimen/_16ssp"
         android:textStyle="bold"
+        android:fontFamily="sans-serif-condensed-medium"
         app:layout_constraintBottom_toBottomOf="@id/image_back"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

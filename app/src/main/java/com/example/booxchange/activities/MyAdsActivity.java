@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class MyAdsActivity extends AppCompatActivity implements AdListener {
+public class MyAdsActivity extends BaseActivity implements AdListener {
 
     ActivityMyAdsBinding binding;
     FirebaseFirestore database;
@@ -37,6 +37,12 @@ public class MyAdsActivity extends AppCompatActivity implements AdListener {
         init();
         getMyAds();
         setListeners();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getMyAds();
     }
 
     private void init() {

@@ -3,7 +3,6 @@ package com.example.booxchange.activities;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
@@ -30,8 +29,8 @@ import android.widget.Toast;
 
 import com.example.booxchange.R;
 import com.example.booxchange.adapters.AdInfoWindowAdapter;
+import com.example.booxchange.databinding.ActivityMapsBinding;
 import com.example.booxchange.models.Ad;
-import com.example.booxchange.models.ChatMessage;
 import com.example.booxchange.models.User;
 import com.example.booxchange.utilities.Constants;
 import com.example.booxchange.utilities.PreferenceManager;
@@ -46,15 +45,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.example.booxchange.databinding.ActivityMapsBinding;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.common.collect.Maps;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -62,14 +56,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-
-import me.ibrahimsn.lib.OnItemSelectedListener;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
 
@@ -136,7 +125,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void setListeners() {
         binding.chipNavigationBar.setOnItemSelectedListener( i -> {
             if (i == Constants.MENU_HOME) {
-                startActivity(new Intent(MapsActivity.this, MainActivity.class));
+                startActivity(new Intent(MapsActivity.this, HomeActivity.class));
                 overridePendingTransition(0, 0);
                 finish();
             }

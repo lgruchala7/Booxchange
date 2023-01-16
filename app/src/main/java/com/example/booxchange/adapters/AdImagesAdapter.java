@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -20,11 +21,12 @@ public class AdImagesAdapter extends RecyclerView.Adapter<AdImagesAdapter.ViewHo
 
     private ArrayList<String> encodedImages;
     private AdImageListaner adImageListaner;
-    private boolean isImageFitToScreen = false;
+    private boolean isModifiable;
 
-    public AdImagesAdapter(ArrayList<String> encodedImages, AdImageListaner adImageListaner) {
+    public AdImagesAdapter(ArrayList<String> encodedImages, AdImageListaner adImageListaner, boolean isModifiable) {
         this.encodedImages = encodedImages;
         this.adImageListaner = adImageListaner;
+        this.isModifiable = isModifiable;
     }
 
     @NonNull
@@ -57,15 +59,18 @@ public class AdImagesAdapter extends RecyclerView.Adapter<AdImagesAdapter.ViewHo
 
         void setData(String encodedImage) {
             binding.adImage.setImageBitmap(getAdImage(encodedImage));
-
-//            if (adImageListaner != null && getItemCount() == 1) {
-//                binding.getRoot().setOnClickListener(v -> {
-//                    adImageListaner.onAddPhotoClicked();
-//                });
-//            }
-            if (adImageListaner != null) {
-                binding.adImage.setOnClickListener(v -> adImageListaner.onAdImageClicked(v) );
+            if (!isModifiable) {
+                binding.imageDelete.setVisibility(View.GONE);
             }
+            else if (isModifiable && getItemCount() == 1) {
+                binding.adImage.setTag("image_add_photo");
+                binding.imageDelete.setVisibility(View.GONE);
+            }
+            else {
+                binding.imageDelete.setOnClickListener( v -> adImageListaner.onDeleteIconClicked(v));
+                binding.imageDelete.setTag(getItemCount() - 1);
+            }
+            binding.adImage.setOnClickListener( v -> adImageListaner.onAdImageClicked(v) );
         }
     }
 
