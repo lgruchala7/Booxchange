@@ -3,15 +3,45 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".activities.MapsActivity"
+    tools:layout="@layout/activity_maps">
 
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".activities.MapsActivity"/>
+        android:layout_height="match_parent"/>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_get_directions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/ic_directions"
+        android:backgroundTint="@color/color_main_dark"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/fab_start_chat"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/white" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_close_directions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/ic_close"
+        android:backgroundTint="@color/color_main_dark"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/fab_start_chat"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/white" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_start_chat"
@@ -34,12 +64,27 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/_10sdp"
         android:layout_marginRight="@dimen/_10sdp"
-        android:layout_marginBottom="@dimen/_75sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
         android:contentDescription="@string/app_name"
         android:src="@drawable/ic_favorite"
         android:backgroundTint="@color/color_main_dark"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/fab_focus_on_my_location"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/white" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_focus_on_my_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/ic_my_location"
+        android:backgroundTint="@color/color_main_dark"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@id/layout_chip_navigation_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="@color/white" />
 

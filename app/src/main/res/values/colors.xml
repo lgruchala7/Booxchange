@@ -20,4 +20,5 @@
     <color name="ic_launcher_background">#d1f9f1</color>
     <color name="color_primary">#35B7CF</color>
     <color name="green">#008000</color>
+    <color name="polyline_active">#1562B3</color>
 </resources>
