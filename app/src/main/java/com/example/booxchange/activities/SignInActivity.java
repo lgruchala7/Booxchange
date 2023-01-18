@@ -12,6 +12,7 @@ import com.example.booxchange.databinding.ActivitySignInBinding;
 import com.example.booxchange.databinding.ActivitySignUpBinding;
 import com.example.booxchange.utilities.Constants;
 import com.example.booxchange.utilities.PreferenceManager;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -73,24 +74,24 @@ public class SignInActivity extends AppCompatActivity {
                     }
                     else {
                         loading(false);
-                        showToast("Unable to sign in");
+                        showSnackbar("Unable to sign in");
                     }
                 });
     }
 
-    private void showToast(String text) {
-        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+    private void showSnackbar(String text) {
+        Snackbar.make(getApplicationContext(), binding.getRoot(), text, Toast.LENGTH_SHORT).show();
     }
 
     private boolean isValidSignInDetails() {
         if (binding.inputEmail.getText().toString().trim().isEmpty()) {
-            showToast("Enter email");
+            showSnackbar("Enter email");
         }
         else if (!Patterns.EMAIL_ADDRESS.matcher(binding.inputEmail.getText().toString()).matches()) {
-            showToast("Enter valid email address");
+            showSnackbar("Enter valid email address");
         }
         else if (binding.inputPassword.getText().toString().trim().isEmpty()) {
-            showToast("Enter password");
+            showSnackbar("Enter password");
         }
         else {
             return true;

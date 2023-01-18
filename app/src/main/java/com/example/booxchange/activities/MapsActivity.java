@@ -47,8 +47,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -56,6 +58,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
@@ -67,6 +70,7 @@ import com.google.maps.PendingResult;
 import com.google.maps.internal.PolylineEncoding;
 import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
+import com.google.maps.model.TravelMode;
 
 import org.checkerframework.checker.units.qual.A;
 
@@ -96,6 +100,7 @@ public class MapsActivity extends FragmentActivity implements
     private FirebaseFirestore database;
     private GeoApiContext geoApiContext;
     private ArrayList<PolylineData> polylinesData = new ArrayList();
+    private boolean isInDirectionMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +111,6 @@ public class MapsActivity extends FragmentActivity implements
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         getCurrentLocation();
-//        setLocationRequest();
 
         if (isPermissionGranted) {
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -121,8 +125,6 @@ public class MapsActivity extends FragmentActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-
-//        binding.smoothBottomBar.setItemActiveIndex(Constants.MENU_MAP);
     }
 
     private void init() {
@@ -171,19 +173,35 @@ public class MapsActivity extends FragmentActivity implements
             }
         });
         binding.fabAddToFav.setOnClickListener( v -> {
-            int adIndex = Integer.parseInt(currentMarker.getSnippet());
-            getFavoriteAdId(adIndex);
+            if (currentMarker != null) {
+                int adIndex = Integer.parseInt(currentMarker.getSnippet());
+                getFavoriteAdId(adIndex);
+            }
         });
         binding.fabGetDirections.setOnClickListener( v -> {
-            binding.fabGetDirections.setVisibility(View.GONE);
-            binding.fabCloseDirections.setVisibility(View.VISIBLE);
-            calculateDirections(currentMarker);
-            centerOnMyLocation();
+            if (currentMarker != null) {
+                binding.fabAddToFav.setVisibility(View.GONE);
+                binding.fabStartChat.setVisibility(View.GONE);
+                binding.fabGetDirections.setVisibility(View.GONE);
+                binding.fabCloseDirections.setVisibility(View.VISIBLE);
+                currentMarker.hideInfoWindow();
+                calculateDirections(currentMarker);
+            }
         });
         binding.fabFocusOnMyLocation.setOnClickListener( v -> centerOnMyLocation() );
         binding.fabCloseDirections.setOnClickListener ( v -> {
-            binding.fabGetDirections.setVisibility(View.VISIBLE);
+            for (PolylineData polylineData : polylinesData) {
+                polylineData.getPolyline().remove();
+            }
+            centerOnMyLocation();
+            polylinesData.clear();
+            polylinesData = new ArrayList<>();
+            currentMarker = null;
+            isInDirectionMode = false;
+            binding.fabAddToFav.setVisibility(View.VISIBLE);
+            binding.fabStartChat.setVisibility(View.VISIBLE);
             binding.fabCloseDirections.setVisibility(View.GONE);
+
         });
     }
 
@@ -325,10 +343,10 @@ public class MapsActivity extends FragmentActivity implements
             usersDocRef.update(Constants.KEY_FAVORITES, FieldValue.arrayUnion(adId))
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Toast.makeText(MapsActivity.this, "Added to favorites", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(MapsActivity.this, binding.getRoot(), "Added to favorites", Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        Toast.makeText(MapsActivity.this, "Error while adding to favorites", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(MapsActivity.this, binding.getRoot(), "Error while adding to favorites", Toast.LENGTH_SHORT).show();
                     }
                 });
         }
@@ -373,10 +391,12 @@ public class MapsActivity extends FragmentActivity implements
                     .build();
         }
 
-        centerOnMyLocation();
+        UiSettings uiSettings = googleMap.getUiSettings();
+        uiSettings.setMyLocationButtonEnabled(false);
         googleMap.setOnPolylineClickListener(this);
         googleMap.setMyLocationEnabled(true);
         googleMap.setInfoWindowAdapter(new AdInfoWindowAdapter(MapsActivity.this, ads));
+        centerOnMyLocation();
         setMapListeners();
         listenAds();
     }
@@ -437,36 +457,30 @@ public class MapsActivity extends FragmentActivity implements
     }
 
     private void calculateDirections(Marker marker){
-        Log.d(TAG, "calculateDirections: calculating directions.");
+        isInDirectionMode = true;
 
         com.google.maps.model.LatLng destination = new com.google.maps.model.LatLng(
                 marker.getPosition().latitude,
                 marker.getPosition().longitude
         );
-        DirectionsApiRequest directions = new DirectionsApiRequest(geoApiContext);
+        new DirectionsApiRequest(geoApiContext)
+                .alternatives(true)
+                .origin(new com.google.maps.model.LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()))
+                .mode(TravelMode.WALKING)
+                .destination(destination).setCallback(new PendingResult.Callback<DirectionsResult>() {
+                    @Override
+                    public void onResult(DirectionsResult result) {
+                        addPolylinesToMap(result);
+                    }
 
-        directions.alternatives(true);
-        directions.origin(new com.google.maps.model.LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
-
-        Log.d(TAG, "calculateDirections: destination: " + destination.toString());
-        directions.destination(destination).setCallback(new PendingResult.Callback<DirectionsResult>() {
-            @Override
-            public void onResult(DirectionsResult result) {
-                Log.d(TAG, "calculateDirections: routes: " + result.routes[0].toString());
-                Log.d(TAG, "calculateDirections: duration: " + result.routes[0].legs[0].duration);
-                Log.d(TAG, "calculateDirections: distance: " + result.routes[0].legs[0].distance);
-                Log.d(TAG, "calculateDirections: geocodedWayPoints: " + result.geocodedWaypoints[0].toString());
-                addPolylinesToMap(result);
-            }
-
-            @Override
-            public void onFailure(Throwable e) {
-                Log.e(TAG, "calculateDirections: Failed to get directions: " + e.getMessage() );
-            }
-        });
+                    @Override
+                    public void onFailure(Throwable e) {
+                        Log.e(TAG, "calculateDirections: Failed to get directions: " + e.getMessage() );
+                    }
+                });
     }
 
-    private void addPolylinesToMap(final DirectionsResult result){
+    private void addPolylinesToMap(final DirectionsResult result) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
@@ -480,26 +494,35 @@ public class MapsActivity extends FragmentActivity implements
                     polylinesData = new ArrayList<>();
                 }
 
+                double duration = Double.MAX_VALUE;
+                Polyline polyline = null;
+
                 for (DirectionsRoute route: result.routes) {
-                    Log.d(TAG, "run: leg: " + route.legs[0].toString());
                     List<com.google.maps.model.LatLng> decodedPath = PolylineEncoding.decode(route.overviewPolyline.getEncodedPath());
 
                     List<LatLng> newDecodedPath = new ArrayList<>();
 
                     // This loops through all the LatLng coordinates of ONE polyline.
                     for (com.google.maps.model.LatLng latLng: decodedPath) {
-
-//                        Log.d(TAG, "run: latlng: " + latLng.toString());
-
                         newDecodedPath.add(new LatLng(
                                 latLng.lat,
                                 latLng.lng
                         ));
                     }
-                    Polyline polyline = googleMap.addPolyline(new PolylineOptions().addAll(newDecodedPath));
+                    polyline = googleMap.addPolyline(new PolylineOptions().addAll(newDecodedPath));
                     polyline.setColor(ContextCompat.getColor(MapsActivity.this, R.color.secondary_text));
                     polyline.setClickable(true);
                     polylinesData.add(new PolylineData(polyline, route.legs[0]));
+
+                    double tempDuration = route.legs[0].duration.inSeconds;
+                    if (tempDuration < duration) {
+                        duration = tempDuration;
+                    }
+                }
+
+                if (polyline != null) {
+                    onPolylineClick(polyline);
+                    zoomRoute(polyline.getPoints());
                 }
             }
         });
@@ -540,7 +563,25 @@ public class MapsActivity extends FragmentActivity implements
         LatLng currentLatLng = new LatLng(
                 currentLocation.getLatitude(),
                 currentLocation.getLongitude());
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 14.0f));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 14.0f), 600, null);
+//        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 14.0f));
+    }
+
+    public void zoomRoute(List<LatLng> latLngList) {
+        if (googleMap == null || latLngList == null || latLngList.isEmpty()) return;
+
+        LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
+        for (LatLng latLngPoint : latLngList)
+            boundsBuilder.include(latLngPoint);
+
+        int routePadding = 120;
+        LatLngBounds latLngBounds = boundsBuilder.build();
+
+        googleMap.animateCamera(
+                CameraUpdateFactory.newLatLngBounds(latLngBounds, routePadding),
+                600,
+                null
+        );
     }
 
     @Override
@@ -567,17 +608,18 @@ public class MapsActivity extends FragmentActivity implements
 
     @Override
     public void onMapClick(@NonNull LatLng latLng) {
-        binding.fabAddToFav.setVisibility(View.GONE);
-        binding.fabStartChat.setVisibility(View.GONE);
-        binding.fabGetDirections.setVisibility(View.GONE);
-        currentMarker = null;
+        if (!isInDirectionMode) {
+            binding.fabAddToFav.setVisibility(View.GONE);
+            binding.fabStartChat.setVisibility(View.GONE);
+            binding.fabGetDirections.setVisibility(View.GONE);
+            currentMarker = null;
+        }
     }
 
     @Override
     public void onPolylineClick(Polyline polyline) {
 
-        for(PolylineData polylineData: polylinesData){
-            Log.d(TAG, "onPolylineClick: toString: " + polylineData.toString());
+        for (PolylineData polylineData: polylinesData) {
             if (polyline.getId().equals(polylineData.getPolyline().getId())) {
                 polylineData.getPolyline().setColor(ContextCompat.getColor(getApplicationContext(), R.color.polyline_active));
                 polylineData.getPolyline().setZIndex(1);

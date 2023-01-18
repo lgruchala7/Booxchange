@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.example.booxchange.databinding.ActivityHomeBinding;
 import com.example.booxchange.utilities.Constants;
 import com.example.booxchange.utilities.PreferenceManager;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -58,8 +59,8 @@ public class HomeActivity extends BaseActivity {
         binding.chipNavigationBar.setItemSelected(Constants.MENU_HOME, true);
     }
 
-    private void showToast(String text) {
-        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+    private void showSnackbar(String text) {
+        Snackbar.make(getApplicationContext(), binding.getRoot(), text, Toast.LENGTH_SHORT).show();
     }
 
     private void setListeners() {
@@ -102,7 +103,7 @@ public class HomeActivity extends BaseActivity {
                         preferenceManager.getString(Constants.KEY_USER_ID)
                 );
         documentReference.update(Constants.KEY_FCM_TOKEN, token)
-                .addOnFailureListener(e -> showToast("Unable to update token"));
+                .addOnFailureListener(e -> showSnackbar("Unable to update token"));
     }
 
 }

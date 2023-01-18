@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.example.booxchange.databinding.ActivitySettingsBinding;
 import com.example.booxchange.utilities.Constants;
 import com.example.booxchange.utilities.PreferenceManager;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -90,13 +91,13 @@ public class SettingsActivity extends BaseActivity {
     private final ActivityResultLauncher<Intent> takePicture = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), result -> {
                 if (result.getResultCode() != RESULT_OK) {
-                    showToast("Problem occurred when accessing system settings");
+                    showSnackbar("Problem occurred when accessing system settings");
                 }
             }
     );
 
-    private void showToast(String text) {
-        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+    private void showSnackbar(String text) {
+        Snackbar.make(getApplicationContext(), binding.getRoot(), text, Toast.LENGTH_SHORT).show();
     }
 
     private void deleteMyAccount() {
@@ -115,7 +116,7 @@ public class SettingsActivity extends BaseActivity {
                         }
                     }
                     else {
-                        showToast("Error occurred while deleting account");
+                        showSnackbar("Error occurred while deleting account");
                         return;
                     }
                 });
@@ -125,13 +126,13 @@ public class SettingsActivity extends BaseActivity {
                 .delete()
                 .addOnCompleteListener( task -> {
                     if (task.isSuccessful()) {
-                        showToast("Account successfully deleted");
+                        showSnackbar("Account successfully deleted");
                         preferenceManager.clear();
                         startActivity(new Intent(getApplicationContext(), SignInActivity.class));
                         finish();
                     }
                     else {
-                        showToast("Failed to delete account");
+                        showSnackbar("Failed to delete account");
                     }
                 } );
     }

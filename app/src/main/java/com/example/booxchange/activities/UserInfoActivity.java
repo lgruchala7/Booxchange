@@ -16,6 +16,7 @@ import com.example.booxchange.databinding.ActivityUserInfoBinding;
 import com.example.booxchange.models.User;
 import com.example.booxchange.utilities.Constants;
 import com.example.booxchange.utilities.PreferenceManager;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -177,15 +178,15 @@ public class UserInfoActivity extends BaseActivity {
     }
         
 
-    private void showToast(String text) {
-        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+    private void showSnackbar(String text) {
+        Snackbar.make(getApplicationContext(), binding.getRoot(), text, Toast.LENGTH_SHORT).show();
     }
 
     private void showErrorMessage(Exception e) {
         if (e != null) {
             e.printStackTrace();
         }
-        showToast("Error occurred while accessing user data");
+        showSnackbar("Error occurred while accessing user data");
     }
 
     private String getReadableDateTime(Date date) {
@@ -212,12 +213,12 @@ public class UserInfoActivity extends BaseActivity {
             usersDocRef.update(Constants.KEY_FRIENDS, FieldValue.arrayUnion(user.id))
                     .addOnCompleteListener( task -> {
                         if (task.isSuccessful()) {
-                            showToast("Added to friend list");
+                            showSnackbar("Added to friend list");
                             binding.imageFriendAdd.setVisibility(View.GONE);
                             binding.imageFriendRemove.setVisibility(View.VISIBLE);
                         }
                         else {
-                            showToast("Error while adding to friend list");
+                            showSnackbar("Error while adding to friend list");
                         }
                     });
 //        }
@@ -233,12 +234,12 @@ public class UserInfoActivity extends BaseActivity {
             usersDocRef.update(Constants.KEY_FRIENDS, FieldValue.arrayRemove(user.id))
                     .addOnCompleteListener( task -> {
                         if (task.isSuccessful()) {
-                            showToast("Removed from friend list");
+                            showSnackbar("Removed from friend list");
                             binding.imageFriendRemove.setVisibility(View.GONE);
                             binding.imageFriendAdd.setVisibility(View.VISIBLE);
                         }
                         else {
-                            showToast("Error while removing from friend list");
+                            showSnackbar("Error while removing from friend list");
                         }
                     });
 //        }

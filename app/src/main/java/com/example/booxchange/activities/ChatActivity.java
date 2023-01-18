@@ -17,6 +17,7 @@ import com.example.booxchange.network.ApiService;
 import com.example.booxchange.utilities.Constants;
 import com.example.booxchange.utilities.PreferenceManager;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -114,14 +115,14 @@ public class ChatActivity extends BaseActivity {
 
                 sendNotification(body.toString());
             } catch (Exception e) {
-                showToast(e.getMessage());
+                showSnackbar(e.getMessage());
             }
         }
         binding.inputMessage.setText(null);
     }
 
-    private void showToast(String message) {
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    private void showSnackbar(String message) {
+        Snackbar.make(getApplicationContext(), binding.getRoot(), message, Toast.LENGTH_SHORT).show();
     }
 
     private void sendNotification(String messageBody) {
@@ -137,22 +138,22 @@ public class ChatActivity extends BaseActivity {
                         JSONArray results = responseJson.getJSONArray("results");
                         if (responseJson.getInt("failure") == 1) {
                             JSONObject error = (JSONObject) results.get(0);
-                            showToast(error.getString("error"));
+                            showSnackbar(error.getString("error"));
                             return;
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    showToast("Notification sent successfully");
+                    showSnackbar("Notification sent successfully");
                 }
                 else {
-                    showToast("Error: " + response.code());
+                    showSnackbar("Error: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                showToast(t.getMessage());
+                showSnackbar(t.getMessage());
             }
         });
     }

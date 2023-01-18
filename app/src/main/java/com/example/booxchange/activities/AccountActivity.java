@@ -11,6 +11,7 @@ import com.example.booxchange.databinding.ActivityAccountBinding;
 import com.example.booxchange.models.User;
 import com.example.booxchange.utilities.Constants;
 import com.example.booxchange.utilities.PreferenceManager;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -85,7 +86,7 @@ public class AccountActivity extends BaseActivity {
     }
 
     private void signOut() {
-        showToast("Signing out...");
+        showSnackbar("Signing out...");
         FirebaseFirestore database = FirebaseFirestore.getInstance();
         DocumentReference documentReference =
                 database.collection(Constants.KEY_COLLECTION_USERS).document(
@@ -99,11 +100,11 @@ public class AccountActivity extends BaseActivity {
                     startActivity(new Intent(getApplicationContext(), SignInActivity.class));
                     finish();
                 })
-                .addOnFailureListener(e -> showToast("Unable to sign out"));
+                .addOnFailureListener(e -> showSnackbar("Unable to sign out"));
     }
 
-    private void showToast(String text) {
-        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+    private void showSnackbar(String text) {
+        Snackbar.make(getApplicationContext(), binding.getRoot(), text, Toast.LENGTH_SHORT).show();
     }
 
     private Bitmap getUserImage(String encodedImage) {

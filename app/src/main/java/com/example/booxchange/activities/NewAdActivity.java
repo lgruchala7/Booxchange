@@ -33,6 +33,7 @@ import com.example.booxchange.databinding.ActivityNewAdBinding;
 import com.example.booxchange.listeners.AdImageListaner;
 import com.example.booxchange.utilities.Constants;
 import com.example.booxchange.utilities.PreferenceManager;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;
@@ -78,8 +79,8 @@ public class NewAdActivity extends BaseActivity implements AdImageListaner {
         binding.adImagesRecyclerView.setAdapter(adImagesAdapter);
     }
 
-    private void showToast(String text) {
-        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+    private void showSnackbar(String text) {
+        Snackbar.make(getApplicationContext(), binding.getRoot(), text, Toast.LENGTH_SHORT).show();
     }
 
     private void setListeners() {
@@ -169,7 +170,7 @@ public class NewAdActivity extends BaseActivity implements AdImageListaner {
                                 encodedImages.add(encodeImage(adImageBitmap));
 
                                 if (encodedImages.size() == MAX_AD_IMAGES + 1) {
-                                    showToast("Max number of images");
+                                    showSnackbar("Max number of images");
                                     break;
                                 }
 
@@ -201,19 +202,19 @@ public class NewAdActivity extends BaseActivity implements AdImageListaner {
 
     private boolean isValidBookInputDetails() {
         if (binding.inputTitle.getText().toString().trim().isEmpty()) {
-            showToast("Enter title");
+            showSnackbar("Enter title");
         }
         else if (binding.inputAuthor.getText().toString().trim().isEmpty()) {
-            showToast("Enter author");
+            showSnackbar("Enter author");
         }
         else if (binding.inputGenre.getText().toString().trim().isEmpty()) {
-            showToast("Enter genre");
+            showSnackbar("Enter genre");
         }
         else if (binding.inputCity.getText().toString().trim().isEmpty()) {
-            showToast("Enter city");
+            showSnackbar("Enter city");
         }
         else if (binding.inputAddress.getText().toString().trim().isEmpty()) {
-            showToast("Enter address");
+            showSnackbar("Enter address");
         }
         else {
             return true;
@@ -269,7 +270,7 @@ public class NewAdActivity extends BaseActivity implements AdImageListaner {
                 })
                 .addOnFailureListener(exception -> {
                     loading(false);
-                    showToast(exception.getMessage());
+                    showSnackbar(exception.getMessage());
                 });
     }
 
@@ -281,7 +282,7 @@ public class NewAdActivity extends BaseActivity implements AdImageListaner {
             pickImage.launch(intent);
         }
         else {
-            showToast("Max number of images");
+            showSnackbar("Max number of images");
         }
     }
 
@@ -310,7 +311,7 @@ public class NewAdActivity extends BaseActivity implements AdImageListaner {
                 adImagesAdapter.notifyDataSetChanged();
             } catch (ClassCastException e)
             {
-                showToast("Could not delete the image");
+                showSnackbar("Could not delete the image");
             }
         }
     }

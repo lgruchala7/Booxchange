@@ -21,6 +21,7 @@ import com.example.booxchange.R;
 import com.example.booxchange.databinding.ActivitySignUpBinding;
 import com.example.booxchange.utilities.Constants;
 import com.example.booxchange.utilities.PreferenceManager;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;
@@ -69,8 +70,8 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    private void showToast(String text) {
-        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+    private void showSnackbar(String text) {
+        Snackbar.make(getApplicationContext(), binding.getRoot(), text, Toast.LENGTH_SHORT).show();
     }
 
     private void signUp() {
@@ -98,7 +99,7 @@ public class SignUpActivity extends AppCompatActivity {
                 })
                 .addOnFailureListener(exception -> {
                     loading(false);
-                    showToast(exception.getMessage());
+                    showSnackbar(exception.getMessage());
                 });
     }
 
@@ -134,25 +135,25 @@ public class SignUpActivity extends AppCompatActivity {
 
     private boolean isValidSignUpInputDetails() {
         if (encodedImage == null) {
-            showToast("Choose profile image");
+            showSnackbar("Choose profile image");
         }
         else if (binding.inputName.getText().toString().trim().isEmpty()) {
-            showToast("Enter name");
+            showSnackbar("Enter name");
         }
         else if (binding.inputEmail.getText().toString().trim().isEmpty()) {
-            showToast("Enter email");
+            showSnackbar("Enter email");
         }
         else if (!Patterns.EMAIL_ADDRESS.matcher(binding.inputEmail.getText().toString()).matches()) {
-            showToast("Enter valid email address");
+            showSnackbar("Enter valid email address");
         }
         else if (binding.inputPassword.getText().toString().trim().isEmpty()) {
-            showToast("Enter password");
+            showSnackbar("Enter password");
         }
         else if (binding.inputConfirmPassword.getText().toString().trim().isEmpty()) {
-            showToast("Confirm the password");
+            showSnackbar("Confirm the password");
         }
         else if (!binding.inputPassword.getText().toString().equals(binding.inputConfirmPassword.getText().toString())) {
-            showToast("Password and confirmed password are different");
+            showSnackbar("Password and confirmed password are different");
         }
         else {
             return true;

@@ -23,6 +23,7 @@ import com.example.booxchange.models.User;
 import com.example.booxchange.utilities.Constants;
 import com.example.booxchange.utilities.PreferenceManager;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -173,8 +174,8 @@ public class FullAdInfoActivity extends BaseActivity implements AdImageListaner 
         imageClose.setVisibility(View.VISIBLE);
     }
 
-    private void showToast(String text) {
-        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+    private void showSnackbar(String text) {
+        Snackbar.make(getApplicationContext(), binding.getRoot(), text, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -198,17 +199,17 @@ public class FullAdInfoActivity extends BaseActivity implements AdImageListaner 
         usersDocRef.update(Constants.KEY_FAVORITES, FieldValue.arrayUnion(adId))
                 .addOnCompleteListener( task -> {
                     if (task.isSuccessful()) {
-                        showToast("Added to favorite ads list");
+                        showSnackbar("Added to favorite ads list");
                         binding.imageAddToFavorites.setVisibility(View.GONE);
                         binding.imageRemoveFromFavorites.setVisibility(View.VISIBLE);
                     }
                     else {
-                        showToast("Error while adding to favorite ads list");
+                        showSnackbar("Error while adding to favorite ads list");
                     }
                 });
         }
         else {
-            showToast("Error while adding to favorite ads list");
+            showSnackbar("Error while adding to favorite ads list");
         }
     }
 
@@ -219,17 +220,17 @@ public class FullAdInfoActivity extends BaseActivity implements AdImageListaner 
             usersDocRef.update(Constants.KEY_FAVORITES, FieldValue.arrayRemove(adId))
                     .addOnCompleteListener( task -> {
                         if (task.isSuccessful()) {
-                            showToast("Removed from favorite ads list");
+                            showSnackbar("Removed from favorite ads list");
                             binding.imageRemoveFromFavorites.setVisibility(View.GONE);
                             binding.imageAddToFavorites.setVisibility(View.VISIBLE);
                         }
                         else {
-                            showToast("Error while removing from favorite ads list");
+                            showSnackbar("Error while removing from favorite ads list");
                         }
                     });
         }
         else {
-            showToast("Error while removing from favorite ads list");
+            showSnackbar("Error while removing from favorite ads list");
         }
     }
 
@@ -258,15 +259,15 @@ public class FullAdInfoActivity extends BaseActivity implements AdImageListaner 
                                     .delete()
                                     .addOnCompleteListener( task -> {
                                         if (task.isSuccessful()) {
-                                            showToast("Ad successfully removed");
+                                            showSnackbar("Ad successfully removed");
                                         }
                                         else {
-                                            showToast("Failed to remove ad");
+                                            showSnackbar("Failed to remove ad");
                                         }
                                     } );
                         }
                         else {
-                            showToast("Failed to remove ad");
+                            showSnackbar("Failed to remove ad");
                         }
                     });
         }
@@ -276,10 +277,10 @@ public class FullAdInfoActivity extends BaseActivity implements AdImageListaner 
                     .delete()
                     .addOnCompleteListener( task -> {
                         if (task.isSuccessful()) {
-                            showToast("Ad successfully removed");
+                            showSnackbar("Ad successfully removed");
                         }
                         else {
-                            showToast("Failed to remove ad");
+                            showSnackbar("Failed to remove ad");
                         }
                     } );
         }
