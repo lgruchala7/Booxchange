@@ -1,21 +1,15 @@
 package com.example.booxchange.activities;
 
-import androidx.activity.result.ActivityResultCaller;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.SpannableString;
-import android.text.style.AbsoluteSizeSpan;
-import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
 import android.util.Patterns;
 import android.view.View;
@@ -24,7 +18,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
 import com.example.booxchange.R;
-import com.example.booxchange.databinding.ActivityMainBinding;
 import com.example.booxchange.databinding.ActivitySignUpBinding;
 import com.example.booxchange.utilities.Constants;
 import com.example.booxchange.utilities.PreferenceManager;

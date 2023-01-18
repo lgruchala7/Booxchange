@@ -1,7 +1,5 @@
 package com.example.booxchange.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -73,9 +71,7 @@ public class AccountActivity extends BaseActivity {
             }
         });
 
-        binding.layoutGoToMyAds.setOnClickListener(v -> {
-            startActivity(new Intent(AccountActivity.this, MyAdsActivity.class));
-        });
+        binding.layoutGoToMyAds.setOnClickListener(v -> startActivity(new Intent(AccountActivity.this, MyAdsActivity.class)));
         binding.layoutGoToUserInfo.setOnClickListener(v -> {
             User user = new User(preferenceManager.getString(Constants.KEY_USER_ID),
                     preferenceManager.getString(Constants.KEY_NAME),
