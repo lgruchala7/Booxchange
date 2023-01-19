@@ -119,26 +119,24 @@ public class FullAdInfoActivity extends BaseActivity implements AdImageListaner 
         ad = (Ad) getIntent().getSerializableExtra(Constants.KEY_AD);
         boolean isMyProfile = checkIfMyProfile();
         if (!isMyProfile) {
-            findAdId();
+            checkIfAdFavorite();
         }
     }
 
-    private void findAdId() {
+    private void checkIfAdFavorite() {
         database.collection(Constants.KEY_COLLECTION_ADS)
                 .whereEqualTo(Constants.KEY_USER_ID, ad.userId)
                 .whereEqualTo(Constants.KEY_TIMESTAMP, ad.dateObject)
                 .get()
-                .addOnCompleteListener( task -> checkIfAdFavorite(task));
-    }
-
-    private void checkIfAdFavorite(Task<QuerySnapshot> task) {
-        if (task.isSuccessful() && task.getResult() != null) {
-            adId = task.getResult().getDocuments().get(0).getId();
-            database.collection(Constants.KEY_COLLECTION_USERS)
-                    .document(preferenceManager.getString(Constants.KEY_USER_ID))
-                    .get()
-                    .addOnCompleteListener( getDocumentTask -> setImageFavoriteIndicator(getDocumentTask) );
-        }
+                .addOnCompleteListener( task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        adId = task.getResult().getDocuments().get(0).getId();
+                        database.collection(Constants.KEY_COLLECTION_USERS)
+                                .document(preferenceManager.getString(Constants.KEY_USER_ID))
+                                .get()
+                                .addOnCompleteListener( getDocumentTask -> setImageFavoriteIndicator(getDocumentTask) );
+                }
+        });
     }
 
     private void setImageFavoriteIndicator(Task<DocumentSnapshot> task) {

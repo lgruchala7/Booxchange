@@ -62,6 +62,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -146,6 +147,38 @@ public class MapsActivity extends FragmentActivity implements
         database = FirebaseFirestore.getInstance();
         ads = new ArrayList<>();
         preferenceManager = new PreferenceManager(getApplicationContext());
+    }
+
+    private void checkIfAdFavorite(Ad ad) {
+        database.collection(Constants.KEY_COLLECTION_ADS)
+                .whereEqualTo(Constants.KEY_USER_ID, ad.userId)
+                .whereEqualTo(Constants.KEY_TIMESTAMP, ad.dateObject)
+                .get()
+                .addOnCompleteListener( task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        String adId = task.getResult().getDocuments().get(0).getId();
+                        database.collection(Constants.KEY_COLLECTION_USERS)
+                                .document(preferenceManager.getString(Constants.KEY_USER_ID))
+                                .get()
+                                .addOnCompleteListener(getDocumentTask -> setImageFavoriteIndicator(getDocumentTask, adId, ad));
+                    }
+                });
+    }
+
+    private void setImageFavoriteIndicator(Task<DocumentSnapshot> task, String adId, Ad ad) {
+        if (task.isSuccessful() && task.getResult() != null) {
+            ArrayList<String> favoriteAdList = new ArrayList<>();
+            try {
+                favoriteAdList = (ArrayList<String>) task.getResult().get(Constants.KEY_FAVORITES);
+            } catch (ClassCastException e) {
+                e.printStackTrace();
+            }
+            if (favoriteAdList != null && favoriteAdList.contains(adId)) {
+                ad.isInFavorites = true;
+            } else {
+                ad.isInFavorites = false;
+            }
+        }
     }
 
     private void setListeners() {
@@ -245,11 +278,9 @@ public class MapsActivity extends FragmentActivity implements
                         String city = documentChange.getDocument().getString(Constants.KEY_CITY);
                         String address = documentChange.getDocument().getString(Constants.KEY_ADDRESS);
                         ArrayList<String> images = new ArrayList<>();
-                        for (String image : (ArrayList<String>) documentChange.getDocument().get(Constants.KEY_IMAGE))
-                        {
-                            images.add(image);
-                        }
-//                                documentChange.getDocument().get (Constants.KEY_IMAGE);
+
+                        images.addAll((ArrayList<String>) documentChange.getDocument().get(Constants.KEY_IMAGE));
+
                         String dateTime = getReadableDateTime(documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP));
                         Date dateObject = documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP);
                         String userId = documentChange.getDocument().getString(Constants.KEY_USER_ID);
@@ -324,6 +355,9 @@ public class MapsActivity extends FragmentActivity implements
 //            binding.conversationsRecyclerView.smoothScrollToPosition(0);
 //            binding.conversationsRecyclerView.setVisibility(View.VISIBLE);
 //            binding.progressBar.setVisibility(View.GONE);
+            }
+            for (Ad ad : ads) {
+                checkIfAdFavorite(ad);
             }
             showAdsOnMap();
         });
@@ -417,8 +451,7 @@ public class MapsActivity extends FragmentActivity implements
                     .build();
         }
 
-        UiSettings uiSettings = googleMap.getUiSettings();
-        uiSettings.setMyLocationButtonEnabled(false);
+        googleMap.getUiSettings().setMyLocationButtonEnabled(false);
         googleMap.setOnPolylineClickListener(this);
         googleMap.setMyLocationEnabled(true);
         googleMap.setInfoWindowAdapter(new AdInfoWindowAdapter(MapsActivity.this, ads));

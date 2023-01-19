@@ -19,16 +19,24 @@ import com.example.booxchange.activities.ChatActivity;
 import com.example.booxchange.models.Ad;
 import com.example.booxchange.models.User;
 import com.example.booxchange.utilities.Constants;
+import com.example.booxchange.utilities.PreferenceManager;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.prefs.PreferenceChangeEvent;
 
 public class AdInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
     private final View customView;
     private Context context;
     private List<Ad> adList;
+    private FirebaseFirestore database = FirebaseFirestore.getInstance();
 
     public AdInfoWindowAdapter(Context context, List<Ad> adList) {
         this.context = context;
@@ -56,8 +64,8 @@ public class AdInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
             RatingBar condition = (RatingBar) customView.findViewById(R.id.rating_bar_condition);
             condition.setRating(Float.parseFloat(ad.condition));
 
-            TextView description = (TextView) customView.findViewById(R.id.text_description);
-            description.setText(ad.description);
+//            TextView description = (TextView) customView.findViewById(R.id.text_description);
+//            description.setText(ad.description);
 
             TextView city = (TextView) customView.findViewById(R.id.text_city);
             city.setText(ad.city);
@@ -68,6 +76,13 @@ public class AdInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
             AppCompatImageView adImage = (AppCompatImageView) customView.findViewById(R.id.image_ad);
             adImage.setImageBitmap(getBitmapFromEncodedString(ad.images.get(0)));
             adImage.setBackground(null);
+
+            if (ad.isInFavorites) {
+                customView.findViewById(R.id.image_is_in_favorites).setVisibility(View.VISIBLE);
+            }
+            else {
+                customView.findViewById(R.id.image_is_in_favorites).setVisibility(View.GONE);
+            }
 
             return customView;
         } catch (NumberFormatException e) {

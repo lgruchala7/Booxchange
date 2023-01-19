@@ -8,6 +8,7 @@ public class Ad implements Serializable {
     public String title, author, genre, condition, description, city, address, userName, userId, userEmail, dateTime, userImage;
     public ArrayList<String> images;
     public Date dateObject;
+    public boolean isInFavorites;
 
     public Ad() {}
 }

@@ -5,9 +5,36 @@
     <string name="menu_account">Account</string>
     <string name="title_activity_maps">MapsActivity</string>
     <string-array name="genres">
-        <item>Sci-Fi</item>
-        <item>Tragedy</item>
-        <item>Comedy</item>
+        <item>Art</item>
+        <item>Biography</item>
+        <item>Business</item>
+        <item>Children</item>
+        <item>Christian</item>
+        <item>Classics</item>
+        <item>Comics</item>
+        <item>Cookbooks</item>
+        <item>Fantasy</item>
+        <item>Fiction</item>
+        <item>Graphic Novels</item>
+        <item>Historical Fiction</item>
+        <item>History</item>
+        <item>Horror</item>
+        <item>Memoir</item>
+        <item>Music</item>
+        <item>Mystery</item>
+        <item>Nonfiction</item>
+        <item>Poetry</item>
+        <item>Psychology</item>
+        <item>Romance</item>
+        <item>Science</item>
+        <item>Science Fiction</item>
+        <item>Self Help</item>
+        <item>Sports</item>
+        <item>Thriller</item>
+        <item>Travel</item>
+        <item>Young Adult</item>
+        <item>Other</item>
+
     </string-array>
     <string-array name="countries" formatted="false" translatable="false">
         <item>Afghanistan</item>
