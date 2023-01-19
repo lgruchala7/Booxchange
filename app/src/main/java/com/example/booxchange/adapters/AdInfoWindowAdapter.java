@@ -40,7 +40,8 @@ public class AdInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     @Override
     public View getInfoContents(@NonNull Marker marker) {
         try {
-            int adIndex = Integer.parseInt(marker.getSnippet());
+//            int adIndex = Integer.parseInt(marker.getSnippet());
+            int adIndex = Integer.parseInt(marker.getTag().toString());
             Ad ad = adList.get(adIndex);
 
             TextView title = (TextView) customView.findViewById(R.id.text_title);

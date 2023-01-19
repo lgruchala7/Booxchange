@@ -97,7 +97,7 @@ public class SettingsActivity extends BaseActivity {
     );
 
     private void showSnackbar(String text) {
-        Snackbar.make(getApplicationContext(), binding.getRoot(), text, Toast.LENGTH_SHORT).show();
+        Snackbar.make(SettingsActivity.this, binding.getRoot(), text, Toast.LENGTH_SHORT).show();
     }
 
     private void deleteMyAccount() {

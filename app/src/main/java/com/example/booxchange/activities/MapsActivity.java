@@ -2,6 +2,7 @@ package com.example.booxchange.activities;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -162,7 +163,8 @@ public class MapsActivity extends FragmentActivity implements
         });
         binding.fabStartChat.setOnClickListener( v -> {
             if (currentMarker != null) {
-                int adIndex = Integer.parseInt(currentMarker.getSnippet());
+//                int adIndex = Integer.parseInt(currentMarker.getSnippet());
+                int adIndex = Integer.parseInt(currentMarker.getTag().toString());
                 Ad ad = ads.get(adIndex);
 
                 User user = new User(ad.userId, ad.userName, ad.userImage);
@@ -174,7 +176,8 @@ public class MapsActivity extends FragmentActivity implements
         });
         binding.fabAddToFav.setOnClickListener( v -> {
             if (currentMarker != null) {
-                int adIndex = Integer.parseInt(currentMarker.getSnippet());
+//                int adIndex = Integer.parseInt(currentMarker.getSnippet());
+                int adIndex = Integer.parseInt(currentMarker.getTag().toString());
                 getFavoriteAdId(adIndex);
             }
         });
@@ -185,6 +188,19 @@ public class MapsActivity extends FragmentActivity implements
                 binding.fabGetDirections.setVisibility(View.GONE);
                 binding.fabCloseDirections.setVisibility(View.VISIBLE);
                 currentMarker.hideInfoWindow();
+                googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                    @Nullable
+                    @Override
+                    public View getInfoContents(@NonNull Marker marker) {
+                        return null;
+                    }
+
+                    @Nullable
+                    @Override
+                    public View getInfoWindow(@NonNull Marker marker) {
+                        return null;
+                    }
+                });
                 calculateDirections(currentMarker);
             }
         });
@@ -193,11 +209,19 @@ public class MapsActivity extends FragmentActivity implements
             for (PolylineData polylineData : polylinesData) {
                 polylineData.getPolyline().remove();
             }
-            centerOnMyLocation();
             polylinesData.clear();
             polylinesData = new ArrayList<>();
+
+//            currentMarker.hideInfoWindow();
+            googleMap.clear();
+            googleMap.setInfoWindowAdapter(new AdInfoWindowAdapter(MapsActivity.this, ads));
+            setMapListeners();
+            showAdsOnMap();
+            centerOnMyLocation();
+
             currentMarker = null;
             isInDirectionMode = false;
+
             binding.fabAddToFav.setVisibility(View.VISIBLE);
             binding.fabStartChat.setVisibility(View.VISIBLE);
             binding.fabCloseDirections.setVisibility(View.GONE);
@@ -325,8 +349,10 @@ public class MapsActivity extends FragmentActivity implements
                     Marker marker = googleMap.addMarker(
                             new MarkerOptions()
                                     .position(latLng)
-                                    .snippet(Integer.toString(i))
+//                                    .snippet(Integer.toString(i))
                                     .icon(BitmapDescriptorFactory.fromBitmap(markerBitmap)));
+                    String tag = Integer.toString(i);
+                    marker.setTag(tag);
                 }
             } catch (IOException exception) {
                 exception.printStackTrace();
@@ -396,16 +422,17 @@ public class MapsActivity extends FragmentActivity implements
         googleMap.setOnPolylineClickListener(this);
         googleMap.setMyLocationEnabled(true);
         googleMap.setInfoWindowAdapter(new AdInfoWindowAdapter(MapsActivity.this, ads));
-        centerOnMyLocation();
         setMapListeners();
         listenAds();
+        centerOnMyLocation();
     }
 
     private void setMapListeners() {
         googleMap.setOnMarkerClickListener(this);
         googleMap.setOnMapClickListener(this);
         googleMap.setOnInfoWindowClickListener( marker -> {
-            int adIndex = Integer.parseInt(marker.getSnippet());
+//            int adIndex = Integer.parseInt(marker.getSnippet());
+            int adIndex = Integer.parseInt(marker.getTag().toString());
             Ad ad = ads.get(adIndex);
 
             Intent intent = new Intent(MapsActivity.this, FullAdInfoActivity.class);
@@ -494,7 +521,7 @@ public class MapsActivity extends FragmentActivity implements
                     polylinesData = new ArrayList<>();
                 }
 
-                double duration = Double.MAX_VALUE;
+                double duration = Long.MAX_VALUE;
                 Polyline polyline = null;
 
                 for (DirectionsRoute route: result.routes) {
@@ -514,7 +541,7 @@ public class MapsActivity extends FragmentActivity implements
                     polyline.setClickable(true);
                     polylinesData.add(new PolylineData(polyline, route.legs[0]));
 
-                    double tempDuration = route.legs[0].duration.inSeconds;
+                    long tempDuration = route.legs[0].duration.inSeconds;
                     if (tempDuration < duration) {
                         duration = tempDuration;
                     }
@@ -523,6 +550,8 @@ public class MapsActivity extends FragmentActivity implements
                 if (polyline != null) {
                     onPolylineClick(polyline);
                     zoomRoute(polyline.getPoints());
+                    currentMarker.setTitle(String.valueOf((int)((duration / 59.0) + 1)) + " min.");
+                    currentMarker.showInfoWindow();
                 }
             }
         });
@@ -599,10 +628,13 @@ public class MapsActivity extends FragmentActivity implements
 
     @Override
     public boolean onMarkerClick(@NonNull Marker marker) {
-        binding.fabAddToFav.setVisibility(View.VISIBLE);
-        binding.fabStartChat.setVisibility(View.VISIBLE);
-        binding.fabGetDirections.setVisibility(View.VISIBLE);
-        currentMarker = marker;
+        if (!isInDirectionMode) {
+            binding.fabAddToFav.setVisibility(View.VISIBLE);
+            binding.fabStartChat.setVisibility(View.VISIBLE);
+            binding.fabGetDirections.setVisibility(View.VISIBLE);
+            currentMarker = marker;
+            currentMarker.showInfoWindow();
+        }
         return false;
     }
 

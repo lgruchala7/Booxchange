@@ -175,7 +175,7 @@ public class FullAdInfoActivity extends BaseActivity implements AdImageListaner 
     }
 
     private void showSnackbar(String text) {
-        Snackbar.make(getApplicationContext(), binding.getRoot(), text, Toast.LENGTH_SHORT).show();
+        Snackbar.make(FullAdInfoActivity.this, binding.getRoot(), text, Toast.LENGTH_SHORT).show();
     }
 
     @Override

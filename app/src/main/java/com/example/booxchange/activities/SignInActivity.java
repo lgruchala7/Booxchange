@@ -80,7 +80,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void showSnackbar(String text) {
-        Snackbar.make(getApplicationContext(), binding.getRoot(), text, Toast.LENGTH_SHORT).show();
+        Snackbar.make(SignInActivity.this, binding.getRoot(), text, Toast.LENGTH_SHORT).show();
     }
 
     private boolean isValidSignInDetails() {

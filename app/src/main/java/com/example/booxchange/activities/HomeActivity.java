@@ -60,7 +60,7 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void showSnackbar(String text) {
-        Snackbar.make(getApplicationContext(), binding.getRoot(), text, Toast.LENGTH_SHORT).show();
+        Snackbar.make(HomeActivity.this, binding.getRoot(), text, Toast.LENGTH_SHORT).show();
     }
 
     private void setListeners() {

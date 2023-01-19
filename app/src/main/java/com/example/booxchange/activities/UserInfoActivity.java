@@ -179,7 +179,7 @@ public class UserInfoActivity extends BaseActivity {
         
 
     private void showSnackbar(String text) {
-        Snackbar.make(getApplicationContext(), binding.getRoot(), text, Toast.LENGTH_SHORT).show();
+        Snackbar.make(UserInfoActivity.this, binding.getRoot(), text, Toast.LENGTH_SHORT).show();
     }
 
     private void showErrorMessage(Exception e) {

@@ -122,7 +122,7 @@ public class ChatActivity extends BaseActivity {
     }
 
     private void showSnackbar(String message) {
-        Snackbar.make(getApplicationContext(), binding.getRoot(), message, Toast.LENGTH_SHORT).show();
+        Snackbar.make(ChatActivity.this, binding.getRoot(), message, Toast.LENGTH_SHORT).show();
     }
 
     private void sendNotification(String messageBody) {
