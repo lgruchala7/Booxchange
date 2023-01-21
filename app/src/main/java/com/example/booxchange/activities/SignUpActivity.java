@@ -80,6 +80,7 @@ public class SignUpActivity extends AppCompatActivity {
         user.put(Constants.KEY_NAME, binding.inputName.getText().toString());
         user.put(Constants.KEY_EMAIL, binding.inputEmail.getText().toString());
         user.put(Constants.KEY_PASSWORD, binding.inputPassword.getText().toString());
+        user.put(Constants.KEY_COUNTRY, binding.inputCountry.getText().toString());
         user.put(Constants.KEY_USER_IMAGE, encodedImage);
         Date date = new Date();
         user.put(Constants.KEY_TIMESTAMP, date);

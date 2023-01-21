@@ -88,6 +88,7 @@ public class MyAdsActivity extends BaseActivity implements AdListener {
                             loading(false);
                         }
                         else {
+                            binding.adsRecyclerView.setVisibility(View.GONE);
                             showErrorMessage();
                         }
                     }
@@ -119,7 +120,10 @@ public class MyAdsActivity extends BaseActivity implements AdListener {
     @Override
     public void onAdClicked(Ad ad) {
         Intent intent = new Intent(MyAdsActivity.this, FullAdInfoActivity.class);
-        intent.putExtra(Constants.KEY_AD, ad);
+        intent.putExtra(Constants.KEY_TIMESTAMP, ad.dateObject);
+        intent.putExtra(Constants.KEY_USER_ID, ad.userId);
+        intent.putExtra(Constants.KEY_FAVORITES, ad.isInFavorites);
         startActivity(intent);
     }
+
 }

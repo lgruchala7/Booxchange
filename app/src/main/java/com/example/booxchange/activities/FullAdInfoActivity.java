@@ -10,6 +10,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Toast;
@@ -31,8 +33,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class FullAdInfoActivity extends BaseActivity implements AdImageListaner {
@@ -43,6 +48,7 @@ public class FullAdInfoActivity extends BaseActivity implements AdImageListaner 
     private AdImagesAdapter adImagesAdapter;
     private PreferenceManager preferenceManager;
     private FirebaseFirestore database;
+    private boolean isMyProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +57,7 @@ public class FullAdInfoActivity extends BaseActivity implements AdImageListaner 
         setContentView(binding.getRoot());
 
         init();
-        loadAdDetails();
+//        loadAdDetails();
         setListeners();
     }
 
@@ -98,7 +104,6 @@ public class FullAdInfoActivity extends BaseActivity implements AdImageListaner 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         removeFromMyAds();
-                        onBackPressed();
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -115,28 +120,58 @@ public class FullAdInfoActivity extends BaseActivity implements AdImageListaner 
         preferenceManager = new PreferenceManager(getApplicationContext());
         database = FirebaseFirestore.getInstance();
 
-
-        ad = (Ad) getIntent().getSerializableExtra(Constants.KEY_AD);
-        boolean isMyProfile = checkIfMyProfile();
-        if (!isMyProfile) {
-            checkIfAdFavorite();
-        }
+        ad = new Ad();
+        ad.dateObject = (Date) getIntent().getSerializableExtra(Constants.KEY_TIMESTAMP);
+        ad.userId = (String) getIntent().getSerializableExtra(Constants.KEY_USER_ID);
+        ad.isInFavorites = (boolean) getIntent().getSerializableExtra(Constants.KEY_FAVORITES);
+//        if (!isMyProfile) {
+            getAdInfo();
+//        }
     }
 
-    private void checkIfAdFavorite() {
+//    private void checkIfAdFavorite() {
+//        database.collection(Constants.KEY_COLLECTION_ADS)
+//                .whereEqualTo(Constants.KEY_USER_ID, ad.userId)
+//                .whereEqualTo(Constants.KEY_TIMESTAMP, ad.dateObject)
+//                .get()
+//                .addOnCompleteListener( task -> getAdInfo(task) );
+//    }
+    
+    private void getAdInfo() {
         database.collection(Constants.KEY_COLLECTION_ADS)
                 .whereEqualTo(Constants.KEY_USER_ID, ad.userId)
                 .whereEqualTo(Constants.KEY_TIMESTAMP, ad.dateObject)
                 .get()
                 .addOnCompleteListener( task -> {
                     if (task.isSuccessful() && task.getResult() != null) {
-                        adId = task.getResult().getDocuments().get(0).getId();
-                        database.collection(Constants.KEY_COLLECTION_USERS)
-                                .document(preferenceManager.getString(Constants.KEY_USER_ID))
-                                .get()
-                                .addOnCompleteListener( getDocumentTask -> setImageFavoriteIndicator(getDocumentTask) );
-                }
-        });
+                        DocumentSnapshot document = task.getResult().getDocuments().get(0);
+
+                        ad.title = document.getString(Constants.KEY_TITLE);
+                        ad.author = document.getString(Constants.KEY_AUTHOR);
+                        ad.genre = document.getString(Constants.KEY_GENRE);
+                        ad.condition = document.getString(Constants.KEY_CONDITION);
+                        ad.description = document.getString(Constants.KEY_DESCRIPTION);
+                        ad.city = document.getString(Constants.KEY_CITY);
+                        ad.address = document.getString(Constants.KEY_ADDRESS);
+                        ad.images = (ArrayList<String>) document.get(Constants.KEY_IMAGE);
+                        ad.dateTime = getReadableDateTime(document.getDate(Constants.KEY_TIMESTAMP));
+                        ad.dateObject = document.getDate(Constants.KEY_TIMESTAMP);
+                        ad.userId = document.getString(Constants.KEY_USER_ID);
+                        ad.userName = document.getString(Constants.KEY_NAME);
+                        ad.userImage = document.getString(Constants.KEY_USER_IMAGE);
+                        ad.userEmail = document.getString(Constants.KEY_EMAIL);
+
+                        adId = document.getId();
+                        loadAdDetails();
+
+                        isMyProfile = checkIfMyProfile();
+                    }
+                    else {
+                        showSnackbar("Failed to load ad info");
+                        new Handler(Looper.getMainLooper())
+                                .postDelayed( () -> onBackPressed(), 500);
+                    }
+                });
     }
 
     private void setImageFavoriteIndicator(Task<DocumentSnapshot> task) {
@@ -148,9 +183,11 @@ public class FullAdInfoActivity extends BaseActivity implements AdImageListaner 
                     e.printStackTrace();
                 }
                 if (favoriteAdList != null && favoriteAdList.contains(adId)) {
+                    binding.imageDelete.setVisibility(View.GONE);
                     binding.imageAddToFavorites.setVisibility(View.GONE);
                     binding.imageRemoveFromFavorites.setVisibility(View.VISIBLE);
                 } else {
+                    binding.imageDelete.setVisibility(View.GONE);
                     binding.imageRemoveFromFavorites.setVisibility(View.GONE);
                     binding.imageAddToFavorites.setVisibility(View.VISIBLE);
                 }
@@ -232,6 +269,10 @@ public class FullAdInfoActivity extends BaseActivity implements AdImageListaner 
         }
     }
 
+    private String getReadableDateTime(Date date) {
+        return new SimpleDateFormat("dd MMMM, yyyy - kk:mm", Locale.getDefault()).format(date);
+    }
+
     private boolean checkIfMyProfile() {
         boolean isMyProfile = ad.userId.equals(preferenceManager.getString(Constants.KEY_USER_ID));
         if (isMyProfile) {
@@ -239,6 +280,12 @@ public class FullAdInfoActivity extends BaseActivity implements AdImageListaner 
             binding.imageAddToFavorites.setVisibility(View.GONE);
             binding.imageChat.setVisibility(View.GONE);
             binding.imageDelete.setVisibility(View.VISIBLE);
+        }
+        else {
+            database.collection(Constants.KEY_COLLECTION_USERS)
+                    .document(preferenceManager.getString(Constants.KEY_USER_ID))
+                    .get()
+                    .addOnCompleteListener(getDocumentTask -> setImageFavoriteIndicator(getDocumentTask));
         }
         return isMyProfile;
     }
@@ -258,6 +305,7 @@ public class FullAdInfoActivity extends BaseActivity implements AdImageListaner 
                                     .addOnCompleteListener( task -> {
                                         if (task.isSuccessful()) {
                                             showSnackbar("Ad successfully removed");
+                                            removeFromAllFavorites(adId);
                                         }
                                         else {
                                             showSnackbar("Failed to remove ad");
@@ -276,12 +324,41 @@ public class FullAdInfoActivity extends BaseActivity implements AdImageListaner 
                     .addOnCompleteListener( task -> {
                         if (task.isSuccessful()) {
                             showSnackbar("Ad successfully removed");
+                            removeFromAllFavorites(adId);
                         }
                         else {
                             showSnackbar("Failed to remove ad");
                         }
                     } );
         }
+    }
+
+    private void removeFromAllFavorites(String  adId) {
+        database.collection(Constants.KEY_COLLECTION_USERS)
+                .whereArrayContains(Constants.KEY_FAVORITES, adId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        List<DocumentSnapshot> documentList = task.getResult().getDocuments();
+                        if (documentList.isEmpty()) {
+                            onBackPressed();
+                        }
+                        else {
+                            for (DocumentSnapshot document : documentList) {
+                                String documentId = document.getId();
+                                database.collection(Constants.KEY_COLLECTION_USERS)
+                                        .document(documentId)
+                                        .update(Constants.KEY_FAVORITES, FieldValue.arrayRemove(adId))
+                                        .addOnCompleteListener(v -> {
+                                            onBackPressed();
+                                        });
+                            }
+                        }
+                    }
+                    else {
+                        onBackPressed();
+                    }
+                });
     }
 
     @Override

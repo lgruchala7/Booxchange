@@ -196,7 +196,6 @@ public class MapsActivity extends FragmentActivity implements
         });
         binding.fabStartChat.setOnClickListener( v -> {
             if (currentMarker != null) {
-//                int adIndex = Integer.parseInt(currentMarker.getSnippet());
                 int adIndex = Integer.parseInt(currentMarker.getTag().toString());
                 Ad ad = ads.get(adIndex);
 
@@ -209,9 +208,15 @@ public class MapsActivity extends FragmentActivity implements
         });
         binding.fabAddToFav.setOnClickListener( v -> {
             if (currentMarker != null) {
-//                int adIndex = Integer.parseInt(currentMarker.getSnippet());
                 int adIndex = Integer.parseInt(currentMarker.getTag().toString());
-                getFavoriteAdId(adIndex);
+                addToFavorites(adIndex);
+
+            }
+        });
+        binding.fabRemoveFromFav.setOnClickListener( v -> {
+            if (currentMarker != null) {
+                int adIndex = Integer.parseInt(currentMarker.getTag().toString());
+                removeFromFavorites(adIndex);
             }
         });
         binding.fabGetDirections.setOnClickListener( v -> {
@@ -255,8 +260,8 @@ public class MapsActivity extends FragmentActivity implements
             currentMarker = null;
             isInDirectionMode = false;
 
-            binding.fabAddToFav.setVisibility(View.VISIBLE);
-            binding.fabStartChat.setVisibility(View.VISIBLE);
+//            binding.fabAddToFav.setVisibility(View.VISIBLE);
+//            binding.fabStartChat.setVisibility(View.VISIBLE);
             binding.fabCloseDirections.setVisibility(View.GONE);
 
         });
@@ -383,7 +388,6 @@ public class MapsActivity extends FragmentActivity implements
                     Marker marker = googleMap.addMarker(
                             new MarkerOptions()
                                     .position(latLng)
-//                                    .snippet(Integer.toString(i))
                                     .icon(BitmapDescriptorFactory.fromBitmap(markerBitmap)));
                     String tag = Integer.toString(i);
                     marker.setTag(tag);
@@ -395,24 +399,7 @@ public class MapsActivity extends FragmentActivity implements
 
     }
 
-    private void addToFavorites(String adId) {
-        DocumentReference usersDocRef = database.collection(Constants.KEY_COLLECTION_USERS)
-                .document(preferenceManager.getString(Constants.KEY_USER_ID));
-
-        if (usersDocRef != null) {
-            usersDocRef.update(Constants.KEY_FAVORITES, FieldValue.arrayUnion(adId))
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Snackbar.make(MapsActivity.this, binding.getRoot(), "Added to favorites", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        Snackbar.make(MapsActivity.this, binding.getRoot(), "Error while adding to favorites", Toast.LENGTH_SHORT).show();
-                    }
-                });
-        }
-    }
-    
-    private void getFavoriteAdId(int adIndex) {
+    private void addToFavorites(int adIndex) {
         Ad ad = ads.get(adIndex);
         database.collection(Constants.KEY_COLLECTION_ADS)
                 .whereEqualTo(Constants.KEY_TIMESTAMP, ad.dateObject)
@@ -422,12 +409,78 @@ public class MapsActivity extends FragmentActivity implements
                     if (task.isSuccessful() && task.getResult() != null) {
                         QuerySnapshot query = task.getResult();
                         if (query.size() > 0) {
-                            String documentId = query.getDocuments().get(0).getId();
-                            addToFavorites(documentId);
+                            String adId = query.getDocuments().get(0).getId();
+                            DocumentReference usersDocRef = database.collection(Constants.KEY_COLLECTION_USERS)
+                                    .document(preferenceManager.getString(Constants.KEY_USER_ID));
+
+                            if (usersDocRef != null) {
+                                usersDocRef.update(Constants.KEY_FAVORITES, FieldValue.arrayUnion(adId))
+                                        .addOnCompleteListener(updateTask -> {
+                                            if (updateTask.isSuccessful()) {
+                                                binding.fabAddToFav.setVisibility(View.GONE);
+                                                binding.fabRemoveFromFav.setVisibility(View.VISIBLE);
+                                                showSnackbar("Added to favorites");
+                                            }
+                                            else {
+                                                showSnackbar("Error while adding to favorites");
+                                            }
+                                        });
+                            }
                         }
-                    };
+                    }
                 });
     }
+
+    private void removeFromFavorites(int adIndex) {
+        Ad ad = ads.get(adIndex);
+        database.collection(Constants.KEY_COLLECTION_ADS)
+                .whereEqualTo(Constants.KEY_TIMESTAMP, ad.dateObject)
+                .whereEqualTo(Constants.KEY_USER_ID, ad.userId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        QuerySnapshot query = task.getResult();
+                        if (query.size() > 0) {
+                            String adId = query.getDocuments().get(0).getId();
+                            DocumentReference usersDocRef = database.collection(Constants.KEY_COLLECTION_USERS)
+                                    .document(preferenceManager.getString(Constants.KEY_USER_ID));
+                            if (adId != null) {
+                                usersDocRef.update(Constants.KEY_FAVORITES, FieldValue.arrayRemove(adId))
+                                        .addOnCompleteListener( removeTask -> {
+                                            if (removeTask.isSuccessful()) {
+                                                binding.fabRemoveFromFav.setVisibility(View.GONE);
+                                                binding.fabAddToFav.setVisibility(View.VISIBLE);
+                                                showSnackbar("Removed from favorite ads list");
+                                            }
+                                            else {
+                                                showSnackbar("Error while removing from favorite ads list");
+                                            }
+                                        });
+                            }
+                            else {
+                                showSnackbar("Error while removing from favorite ads list");
+                            }
+                        }
+                    }
+                });
+    }
+    
+//    private void getFavoriteAdId(int adIndex) {
+//        Ad ad = ads.get(adIndex);
+//        database.collection(Constants.KEY_COLLECTION_ADS)
+//                .whereEqualTo(Constants.KEY_TIMESTAMP, ad.dateObject)
+//                .whereEqualTo(Constants.KEY_USER_ID, ad.userId)
+//                .get()
+//                .addOnCompleteListener(task -> {
+//                    if (task.isSuccessful() && task.getResult() != null) {
+//                        QuerySnapshot query = task.getResult();
+//                        if (query.size() > 0) {
+//                            String documentId = query.getDocuments().get(0).getId();
+//                            addToFavorites(documentId);
+//                        }
+//                    }
+//                });
+//    }
 
     @SuppressLint("MissingPermission")
     @Override
@@ -464,12 +517,13 @@ public class MapsActivity extends FragmentActivity implements
         googleMap.setOnMarkerClickListener(this);
         googleMap.setOnMapClickListener(this);
         googleMap.setOnInfoWindowClickListener( marker -> {
-//            int adIndex = Integer.parseInt(marker.getSnippet());
             int adIndex = Integer.parseInt(marker.getTag().toString());
             Ad ad = ads.get(adIndex);
 
             Intent intent = new Intent(MapsActivity.this, FullAdInfoActivity.class);
-            intent.putExtra(Constants.KEY_AD, ad);
+            intent.putExtra(Constants.KEY_TIMESTAMP, ad.dateObject);
+            intent.putExtra(Constants.KEY_USER_ID, ad.userId);
+            intent.putExtra(Constants.KEY_FAVORITES, ad.isInFavorites);
             startActivity(intent);
         });
     }
@@ -572,6 +626,7 @@ public class MapsActivity extends FragmentActivity implements
                     polyline = googleMap.addPolyline(new PolylineOptions().addAll(newDecodedPath));
                     polyline.setColor(ContextCompat.getColor(MapsActivity.this, R.color.secondary_text));
                     polyline.setClickable(true);
+                    polyline.setTag(polylinesData.size());
                     polylinesData.add(new PolylineData(polyline, route.legs[0]));
 
                     long tempDuration = route.legs[0].duration.inSeconds;
@@ -582,9 +637,6 @@ public class MapsActivity extends FragmentActivity implements
 
                 if (polyline != null) {
                     onPolylineClick(polyline);
-                    zoomRoute(polyline.getPoints());
-                    currentMarker.setTitle(String.valueOf((int)((duration / 59.0) + 1)) + " min.");
-                    currentMarker.showInfoWindow();
                 }
             }
         });
@@ -626,7 +678,6 @@ public class MapsActivity extends FragmentActivity implements
                 currentLocation.getLatitude(),
                 currentLocation.getLongitude());
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 14.0f), 600, null);
-//        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 14.0f));
     }
 
     public void zoomRoute(List<LatLng> latLngList) {
@@ -646,6 +697,10 @@ public class MapsActivity extends FragmentActivity implements
         );
     }
 
+    private void showSnackbar(String text) {
+        Snackbar.make(MapsActivity.this, binding.getRoot(), text, Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -653,7 +708,6 @@ public class MapsActivity extends FragmentActivity implements
             case REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     getCurrentLocation();
-//                    setLocationRequest();
                 }
                 break;
         }
@@ -662,11 +716,19 @@ public class MapsActivity extends FragmentActivity implements
     @Override
     public boolean onMarkerClick(@NonNull Marker marker) {
         if (!isInDirectionMode) {
-            binding.fabAddToFav.setVisibility(View.VISIBLE);
-            binding.fabStartChat.setVisibility(View.VISIBLE);
-            binding.fabGetDirections.setVisibility(View.VISIBLE);
+            int adIndex = Integer.parseInt(marker.getTag().toString());
             currentMarker = marker;
             currentMarker.showInfoWindow();
+            if (ads.get(adIndex).isInFavorites) {
+                binding.fabRemoveFromFav.setVisibility(View.VISIBLE);
+                binding.fabAddToFav.setVisibility(View.GONE);
+            }
+            else {
+                binding.fabAddToFav.setVisibility(View.VISIBLE);
+                binding.fabRemoveFromFav.setVisibility(View.GONE);
+            }
+            binding.fabStartChat.setVisibility(View.VISIBLE);
+            binding.fabGetDirections.setVisibility(View.VISIBLE);
         }
         return false;
     }
@@ -674,6 +736,7 @@ public class MapsActivity extends FragmentActivity implements
     @Override
     public void onMapClick(@NonNull LatLng latLng) {
         if (!isInDirectionMode) {
+            binding.fabRemoveFromFav.setVisibility(View.GONE);
             binding.fabAddToFav.setVisibility(View.GONE);
             binding.fabStartChat.setVisibility(View.GONE);
             binding.fabGetDirections.setVisibility(View.GONE);
@@ -688,6 +751,9 @@ public class MapsActivity extends FragmentActivity implements
             if (polyline.getId().equals(polylineData.getPolyline().getId())) {
                 polylineData.getPolyline().setColor(ContextCompat.getColor(getApplicationContext(), R.color.polyline_active));
                 polylineData.getPolyline().setZIndex(1);
+                zoomRoute(polyline.getPoints());
+                currentMarker.setTitle(String.valueOf((int)((polylineData.getLeg().duration.inSeconds / 61.0) + 1)) + " min.");
+                currentMarker.showInfoWindow();
             }
             else {
                 polylineData.getPolyline().setColor(ContextCompat.getColor(getApplicationContext(), R.color.secondary_text));

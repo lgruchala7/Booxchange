@@ -58,7 +58,6 @@ public class FriendsActivity extends BaseActivity implements UserListener {
                         DocumentSnapshot documentSnapshot = task.getResult();
                         try {
                             usersIdsList.addAll((ArrayList<String>) documentSnapshot.get(Constants.KEY_FRIENDS));
-//                            usersIdsList.addAll((ArrayList<String>) documentSnapshot.getData().get(Constants.KEY_FRIENDS));
                             getUsers(usersIdsList);
                         } catch (NullPointerException e) {
                             showErrorMessage();

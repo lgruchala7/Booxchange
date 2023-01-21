@@ -59,18 +59,37 @@
             app:tint="@color/white"
             tools:ignore="SpeakableTextPresentCheck" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_add_to_fav"
+        <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:layout_marginBottom="@dimen/_10sdp"
-            android:backgroundTint="@color/color_main_dark"
-            android:src="@drawable/ic_favorite"
-            android:visibility="gone"
-            app:tint="@color/white"
-            tools:ignore="SpeakableTextPresentCheck" />
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_add_to_fav"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:backgroundTint="@color/color_main_dark"
+                android:src="@drawable/ic_favorite_empty"
+                android:visibility="gone"
+                app:tint="@color/white"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_remove_from_fav"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:backgroundTint="@color/color_main_dark"
+                android:src="@drawable/ic_favorite"
+                android:visibility="gone"
+                app:tint="@color/white"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+        </FrameLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_focus_on_my_location"

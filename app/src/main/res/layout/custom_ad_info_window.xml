@@ -12,21 +12,20 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:gravity="center_vertical">
+        app:layout_constraintStart_toStartOf="parent">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_ad"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_gravity="center_vertical"
             android:src="@mipmap/ic_launcher_round" />
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
             android:paddingStart="@dimen/_8sdp"
+            android:layout_gravity="top"
             android:orientation="vertical">
 
             <TextView
@@ -138,30 +137,31 @@
 
         </LinearLayout>
 
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="top">
+<!--        <FrameLayout-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_gravity="top">-->
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/image_not_in_favorites"
-                android:layout_width="@dimen/_35sdp"
-                android:layout_height="@dimen/_35sdp"
-                android:padding="@dimen/_5sdp"
-                android:src="@drawable/ic_favorite_empty"
-                android:tint="@color/color_main_dark" />
+<!--            <androidx.appcompat.widget.AppCompatImageView-->
+<!--                android:id="@+id/image_not_in_favorites"-->
+<!--                android:layout_width="@dimen/_35sdp"-->
+<!--                android:layout_height="@dimen/_35sdp"-->
+<!--                android:padding="@dimen/_5sdp"-->
+<!--                android:src="@drawable/ic_favorite_empty"-->
+<!--                android:tint="@color/color_main_dark" -->
+<!--                android:visibility="gone"/>-->
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/image_is_in_favorites"
-                android:layout_width="@dimen/_35sdp"
-                android:layout_height="@dimen/_35sdp"
-                android:padding="@dimen/_5sdp"
-                android:src="@drawable/ic_favorite"
-                android:tint="@color/color_main_dark"
-                android:visibility="gone"/>
+<!--            <androidx.appcompat.widget.AppCompatImageView-->
+<!--                android:id="@+id/image_is_in_favorites"-->
+<!--                android:layout_width="@dimen/_35sdp"-->
+<!--                android:layout_height="@dimen/_35sdp"-->
+<!--                android:padding="@dimen/_5sdp"-->
+<!--                android:src="@drawable/ic_favorite"-->
+<!--                android:tint="@color/color_main_dark"-->
+<!--                android:visibility="gone"/>-->
 
-        </FrameLayout>
+<!--        </FrameLayout>-->
 
     </LinearLayout>
 
